@@ -76,7 +76,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         # 敏华的数据库
-        'NAME': 'beautifulGirls_database',
+        'NAME': 'beautyGirls_database',
         'USER': 'root',
         'PASSWORD': '1234',
         'HOST': '39.108.185.66',
