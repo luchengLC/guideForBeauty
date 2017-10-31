@@ -4,7 +4,7 @@ from django.core import serializers
 import requests
 import json
 
-from beauty.models import LcTest
+from beauty.models import LcTest, JdHkProductBasemakeup
 
 
 @require_http_methods(["GET"])
@@ -26,8 +26,22 @@ def show_student(request):
 def add_student(request):
     response = {}
     try:
-        stu = LcTest(stu=request.GET.get('stu'))
+        stu = LcTest(sno=request.GET.get('sno'))
         stu.save()
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
+
+
+@require_http_methods(["GET"])
+def show_baseMakeup(request):
+    response = {}
+    try:
+        baseMakeup = JdHkProductBasemakeup.objects.all()[:50]
+        response['list'] = json.loads(serializers.serialize("json", baseMakeup))
         response['msg'] = 'success'
         response['error_num'] = 0
     except Exception as e:

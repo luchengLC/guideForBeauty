@@ -19,4 +19,6 @@ from beauty import views
 urlpatterns = [
     url(r'show_student$', views.show_student, ),
     url(r'add_student$', views.show_student, ),
+
+    url(r'show_baseMakeup$', views.show_baseMakeup, ),
 ]
