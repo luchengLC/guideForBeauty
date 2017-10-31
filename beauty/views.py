@@ -20,3 +20,17 @@ def show_student(request):
         response['error_num'] = 1
     return JsonResponse(response)
 
+
+# 尽量修改用POST
+@require_http_methods(["GET"])
+def add_student(request):
+    response = {}
+    try:
+        stu = LcTest(stu=request.GET.get('stu'))
+        stu.save()
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
