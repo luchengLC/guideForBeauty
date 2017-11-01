@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^beauty/', include("beauty.url"), ),
     url(r'^$', TemplateView.as_view(template_name="index.html")),
+    url(r'^main/$', TemplateView.as_view(template_name="index.html")),
 ]
