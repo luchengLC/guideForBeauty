@@ -5,7 +5,8 @@
       <mainCarousel></mainCarousel>
     </div>
     <div class="main-page">
-      <starGoods></starGoods>
+      <hotGoods></hotGoods>
+      <realativeSearchGoods></realativeSearchGoods>
     </div>
   </div>
 </template>
@@ -13,12 +14,14 @@
 <script>
   import MainNav from './MainNav'
   import MainCarousel from './MainCarousel'
-  import StarGoods from './StarGoods'
+  import HotGoods from './HotGoods'
+  import RealativeSearchGoods from './RealativeSearchGoods'
   export default {
     components: {
       'mainNav': MainNav,
       'mainCarousel': MainCarousel,
-      'starGoods': StarGoods
+      'hotGoods': HotGoods,
+      'realativeSearchGoods': RealativeSearchGoods
     }
   }
 </script>
