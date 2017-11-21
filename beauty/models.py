@@ -1,7 +1,3 @@
-from django.db import models
-
-# Create your models here.
-
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
@@ -9,8 +5,7 @@ from django.db import models
 #   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
-
-# from __future__ import unicode_literals
+from __future__ import unicode_literals
 
 from django.db import models
 
@@ -79,6 +74,15 @@ class AuthUserUserPermissions(models.Model):
         managed = False
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
+
+
+class CountProducts(models.Model):
+    category = models.CharField(max_length=50, blank=True, null=True)
+    number = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'count_products'
 
 
 class DjangoAdminLog(models.Model):
@@ -162,6 +166,30 @@ class JdHkProductBasemakeup(models.Model):
 
 
 class JdHkProductCologne(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=20, blank=True, null=True)
+    store = models.CharField(max_length=50, blank=True, null=True)
+    whole_kg = models.CharField(max_length=20, blank=True, null=True)
+    produce_address = models.CharField(max_length=20, blank=True, null=True)
+    packing = models.CharField(max_length=20, blank=True, null=True)
+    perfume_note = models.CharField(max_length=20, blank=True, null=True)
+    kg = models.CharField(max_length=20, blank=True, null=True)
+    classify = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    good_for_who = models.CharField(max_length=100, blank=True, null=True)
+    price = models.CharField(max_length=10, blank=True, null=True)
+    who_handly = models.CharField(max_length=20, blank=True, null=True)
+    comment_count = models.CharField(max_length=20, blank=True, null=True)
+    comments = models.CharField(max_length=4000, blank=True, null=True)
+    address = models.CharField(max_length=200, blank=True, null=True)
+    first_category = models.CharField(max_length=10, blank=True, null=True)
+    second_category = models.CharField(max_length=10, blank=True, null=True)
+    third_category = models.CharField(max_length=10, blank=True, null=True)
+    img1_address = models.CharField(max_length=100, blank=True, null=True)
+    img2_address = models.CharField(max_length=100, blank=True, null=True)
+    img3_address = models.CharField(max_length=100, blank=True, null=True)
+    img4_address = models.CharField(max_length=100, blank=True, null=True)
+    img5_address = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -201,6 +229,37 @@ class JdHkProductEye(models.Model):
         db_table = 'jd_hk_product_eye'
 
 
+class JdHkProductFragrantBodyMilk(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=20, blank=True, null=True)
+    store = models.CharField(max_length=50, blank=True, null=True)
+    whole_kg = models.CharField(max_length=20, blank=True, null=True)
+    produce_address = models.CharField(max_length=20, blank=True, null=True)
+    packing = models.CharField(max_length=20, blank=True, null=True)
+    perfume_note = models.CharField(max_length=20, blank=True, null=True)
+    kg = models.CharField(max_length=20, blank=True, null=True)
+    classify = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    good_for_who = models.CharField(max_length=100, blank=True, null=True)
+    price = models.CharField(max_length=10, blank=True, null=True)
+    who_handly = models.CharField(max_length=20, blank=True, null=True)
+    comment_count = models.CharField(max_length=10, blank=True, null=True)
+    comments = models.CharField(max_length=4000, blank=True, null=True)
+    first_category = models.CharField(max_length=20, blank=True, null=True)
+    second_category = models.CharField(max_length=20, blank=True, null=True)
+    third_category = models.CharField(max_length=20, blank=True, null=True)
+    address = models.CharField(max_length=200, blank=True, null=True)
+    img1_address = models.CharField(max_length=100, blank=True, null=True)
+    img2_address = models.CharField(max_length=100, blank=True, null=True)
+    img3_address = models.CharField(max_length=100, blank=True, null=True)
+    img4_address = models.CharField(max_length=100, blank=True, null=True)
+    img5_address = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'jd_hk_product_fragrant_body_milk'
+
+
 class JdHkProductLipstick(models.Model):
     first_category = models.CharField(max_length=30, blank=True, null=True)
     third_category = models.CharField(max_length=30, blank=True, null=True)
@@ -235,33 +294,107 @@ class JdHkProductLipstick(models.Model):
 
 
 class JdHkProductParfume(models.Model):
-    商品名称 = models.CharField(max_length=100, blank=True, null=True)
-    商品编号 = models.CharField(max_length=20, blank=True, null=True)
-    店铺 = models.CharField(max_length=50, blank=True, null=True)
-    商品毛重 = models.CharField(max_length=20, blank=True, null=True)
-    商品产地 = models.CharField(max_length=20, blank=True, null=True)
-    包装 = models.CharField(max_length=20, blank=True, null=True)
-    香调 = models.CharField(max_length=20, blank=True, null=True)
-    净含量 = models.CharField(max_length=20, blank=True, null=True)
-    分类 = models.CharField(max_length=20, blank=True, null=True)
-    性别 = models.CharField(max_length=10, blank=True, null=True)
-    适用场景 = models.CharField(max_length=100, blank=True, null=True)
-    价格 = models.CharField(max_length=10, blank=True, null=True)
-    抓取人 = models.CharField(max_length=10, blank=True, null=True)
-    好评率 = models.CharField(max_length=10, blank=True, null=True)
-    评论 = models.CharField(max_length=4000, blank=True, null=True)
-    一级目录 = models.CharField(max_length=10, blank=True, null=True)
-    二级目录 = models.CharField(max_length=10, blank=True, null=True)
-    三级目录 = models.CharField(max_length=10, blank=True, null=True)
-    图片1 = models.CharField(max_length=100, blank=True, null=True)
-    图片2 = models.CharField(max_length=100, blank=True, null=True)
-    图片3 = models.CharField(max_length=100, blank=True, null=True)
-    图片4 = models.CharField(max_length=100, blank=True, null=True)
-    图片5 = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=20, blank=True, null=True)
+    store = models.CharField(max_length=50, blank=True, null=True)
+    whole_kg = models.CharField(max_length=20, blank=True, null=True)
+    produce_address = models.CharField(max_length=20, blank=True, null=True)
+    packing = models.CharField(max_length=20, blank=True, null=True)
+    perfume_note = models.CharField(max_length=20, blank=True, null=True)
+    kg = models.CharField(max_length=20, blank=True, null=True)
+    classify = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    good_for_who = models.CharField(max_length=100, blank=True, null=True)
+    price = models.CharField(max_length=10, blank=True, null=True)
+    who_handly = models.CharField(max_length=10, blank=True, null=True)
+    comment_count = models.CharField(max_length=10, blank=True, null=True)
+    comments = models.CharField(max_length=4000, blank=True, null=True)
+    first_category = models.CharField(max_length=10, blank=True, null=True)
+    second_category = models.CharField(max_length=10, blank=True, null=True)
+    img1_address = models.CharField(max_length=100, blank=True, null=True)
+    third_category = models.CharField(max_length=10, blank=True, null=True)
+    img2_address = models.CharField(max_length=100, blank=True, null=True)
+    img3_address = models.CharField(max_length=100, blank=True, null=True)
+    img4_address = models.CharField(max_length=100, blank=True, null=True)
+    img5_address = models.CharField(max_length=100, blank=True, null=True)
+    address = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'jd_hk_product_parfume'
+
+
+class JdHkProductSolidPerfume(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=20, blank=True, null=True)
+    store = models.CharField(max_length=50, blank=True, null=True)
+    whole_kg = models.CharField(max_length=20, blank=True, null=True)
+    produce_address = models.CharField(max_length=20, blank=True, null=True)
+    packing = models.CharField(max_length=20, blank=True, null=True)
+    perfume_note = models.CharField(max_length=20, blank=True, null=True)
+    kg = models.CharField(max_length=20, blank=True, null=True)
+    classify = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    good_for_who = models.CharField(max_length=100, blank=True, null=True)
+    price = models.CharField(max_length=10, blank=True, null=True)
+    who_handly = models.CharField(max_length=20, blank=True, null=True)
+    comment_count = models.CharField(max_length=10, blank=True, null=True)
+    comments = models.CharField(max_length=4000, blank=True, null=True)
+    first_category = models.CharField(max_length=20, blank=True, null=True)
+    second_category = models.CharField(max_length=20, blank=True, null=True)
+    third_category = models.CharField(max_length=20, blank=True, null=True)
+    address = models.CharField(max_length=200, blank=True, null=True)
+    img1_address = models.CharField(max_length=100, blank=True, null=True)
+    img2_address = models.CharField(max_length=100, blank=True, null=True)
+    img3_address = models.CharField(max_length=100, blank=True, null=True)
+    img4_address = models.CharField(max_length=100, blank=True, null=True)
+    img5_address = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'jd_hk_product_solid_perfume'
+
+
+class JdPerfumeList(models.Model):
+    url_address = models.CharField(max_length=255, blank=True, null=True)
+    id = models.IntegerField(primary_key=True)
+    my_category = models.CharField(max_length=60, blank=True, null=True)
+    source = models.CharField(max_length=60, blank=True, null=True)
+    first_category = models.CharField(max_length=30, blank=True, null=True)
+    third_category = models.CharField(max_length=30, blank=True, null=True)
+    second_category = models.CharField(max_length=30, blank=True, null=True)
+    img1_address = models.CharField(max_length=255, blank=True, null=True)
+    img2_address = models.CharField(max_length=255, blank=True, null=True)
+    img3_address = models.CharField(max_length=255, blank=True, null=True)
+    img4_address = models.CharField(max_length=255, blank=True, null=True)
+    img5_address = models.CharField(max_length=255, blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    number = models.CharField(max_length=30, blank=True, null=True)
+    name = models.CharField(max_length=255)
+    brand = models.CharField(max_length=255, blank=True, null=True)
+    produce_address = models.CharField(max_length=255, blank=True, null=True)
+    comment_count = models.CharField(max_length=255, blank=True, null=True)
+    kg = models.CharField(max_length=255, blank=True, null=True)
+    good_for_who = models.CharField(max_length=255, blank=True, null=True)
+    expiration_date = models.CharField(max_length=255, blank=True, null=True)
+    color = models.CharField(max_length=255, blank=True, null=True)
+    result_effectiveness = models.CharField(max_length=255, blank=True, null=True)
+    category = models.CharField(max_length=255, blank=True, null=True)
+    good_comment_percentage = models.CharField(max_length=255, blank=True, null=True)
+    who_handly = models.CharField(max_length=255, blank=True, null=True)
+    get_time = models.DateTimeField(blank=True, null=True)
+    finish_get_data = models.IntegerField(blank=True, null=True)
+    store = models.CharField(max_length=60, blank=True, null=True)
+    clean_weight = models.CharField(max_length=60, blank=True, null=True)
+    package = models.CharField(max_length=60, blank=True, null=True)
+    fragrance = models.CharField(max_length=60, blank=True, null=True)
+    sex = models.CharField(max_length=10, blank=True, null=True)
+    fragrance_type = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'jd_perfume_list'
 
 
 class JdProductBasemakeup(models.Model):
@@ -300,6 +433,37 @@ class JdProductBasemakeup(models.Model):
         db_table = 'jd_product_baseMakeup'
 
 
+class JdProductCologne(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=20, blank=True, null=True)
+    brand = models.CharField(max_length=20, blank=True, null=True)
+    store = models.CharField(max_length=50, blank=True, null=True)
+    whole_kg = models.CharField(max_length=20, blank=True, null=True)
+    packing = models.CharField(max_length=20, blank=True, null=True)
+    perfume_note = models.CharField(max_length=20, blank=True, null=True)
+    kg = models.CharField(max_length=20, blank=True, null=True)
+    classify = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    good_for_who = models.CharField(max_length=100, blank=True, null=True)
+    price = models.CharField(max_length=10, blank=True, null=True)
+    who_handly = models.CharField(max_length=20, blank=True, null=True)
+    comment_count = models.CharField(max_length=10, blank=True, null=True)
+    comments = models.CharField(max_length=4000, blank=True, null=True)
+    address = models.CharField(max_length=200, blank=True, null=True)
+    first_category = models.CharField(max_length=10, blank=True, null=True)
+    second_category = models.CharField(max_length=10, blank=True, null=True)
+    third_category = models.CharField(max_length=10, blank=True, null=True)
+    img1_address = models.CharField(max_length=100, blank=True, null=True)
+    img2_address = models.CharField(max_length=100, blank=True, null=True)
+    img3_address = models.CharField(max_length=100, blank=True, null=True)
+    img4_address = models.CharField(max_length=100, blank=True, null=True)
+    img5_address = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'jd_product_cologne'
+
+
 class JdProductEye(models.Model):
     first_category = models.CharField(max_length=30, blank=True, null=True)
     third_category = models.CharField(max_length=30, blank=True, null=True)
@@ -334,6 +498,30 @@ class JdProductEye(models.Model):
 
 
 class JdProductFragrantBodyMilk(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=20, blank=True, null=True)
+    store = models.CharField(max_length=50, blank=True, null=True)
+    whole_kg = models.CharField(max_length=20, blank=True, null=True)
+    packing = models.CharField(max_length=20, blank=True, null=True)
+    perfume_note = models.CharField(max_length=20, blank=True, null=True)
+    kg = models.CharField(max_length=20, blank=True, null=True)
+    classify = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    good_for_who = models.CharField(max_length=100, blank=True, null=True)
+    price = models.CharField(max_length=10, blank=True, null=True)
+    who_handly = models.CharField(max_length=20, blank=True, null=True)
+    comment_count = models.CharField(max_length=10, blank=True, null=True)
+    comments = models.CharField(max_length=4000, blank=True, null=True)
+    first_category = models.CharField(max_length=10, blank=True, null=True)
+    second_category = models.CharField(max_length=10, blank=True, null=True)
+    third_category = models.CharField(max_length=10, blank=True, null=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
+    img1_address = models.CharField(max_length=100, blank=True, null=True)
+    img2_address = models.CharField(max_length=100, blank=True, null=True)
+    img3_address = models.CharField(max_length=100, blank=True, null=True)
+    img4_address = models.CharField(max_length=100, blank=True, null=True)
+    img5_address = models.CharField(max_length=100, blank=True, null=True)
+    brand = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -374,29 +562,30 @@ class JdProductLipstick(models.Model):
 
 
 class JdProductParfum(models.Model):
-    品牌 = models.CharField(max_length=50, blank=True, null=True)
-    商品名称 = models.CharField(max_length=100, blank=True, null=True)
-    商品编号 = models.CharField(max_length=50, blank=True, null=True)
-    店铺 = models.CharField(max_length=100, blank=True, null=True)
-    香调 = models.CharField(max_length=50, blank=True, null=True)
-    包装 = models.CharField(max_length=50, blank=True, null=True)
-    商品毛重 = models.CharField(max_length=50, blank=True, null=True)
-    性别 = models.CharField(max_length=10, blank=True, null=True)
-    净含量 = models.CharField(max_length=50, blank=True, null=True)
-    分类 = models.CharField(max_length=50, blank=True, null=True)
-    适用场景 = models.CharField(max_length=200, blank=True, null=True)
-    好评率 = models.CharField(max_length=15, blank=True, null=True)
-    图片1 = models.CharField(max_length=100, blank=True, null=True)
-    图片2 = models.CharField(max_length=100, blank=True, null=True)
-    图片3 = models.CharField(max_length=100, blank=True, null=True)
-    图片4 = models.CharField(max_length=100, blank=True, null=True)
-    图片5 = models.CharField(max_length=100, blank=True, null=True)
-    评论 = models.CharField(max_length=1000, blank=True, null=True)
-    价格 = models.CharField(max_length=100, blank=True, null=True)
-    抓取人 = models.CharField(max_length=20, blank=True, null=True)
-    一级目录 = models.CharField(max_length=20, blank=True, null=True)
-    二级目录 = models.CharField(max_length=20, blank=True, null=True)
-    三级目录 = models.CharField(max_length=20, blank=True, null=True)
+    brand = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=50, blank=True, null=True)
+    store = models.CharField(max_length=100, blank=True, null=True)
+    perfume_note = models.CharField(max_length=50, blank=True, null=True)
+    classify = models.CharField(max_length=50, blank=True, null=True)
+    whole_kg = models.CharField(max_length=50, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    kg = models.CharField(max_length=50, blank=True, null=True)
+    packing = models.CharField(max_length=50, blank=True, null=True)
+    good_for_who = models.CharField(max_length=200, blank=True, null=True)
+    comment_count = models.CharField(max_length=15, blank=True, null=True)
+    img1_address = models.CharField(max_length=100, blank=True, null=True)
+    img2_address = models.CharField(max_length=100, blank=True, null=True)
+    img3_address = models.CharField(max_length=100, blank=True, null=True)
+    img4_address = models.CharField(max_length=100, blank=True, null=True)
+    img5_address = models.CharField(max_length=100, blank=True, null=True)
+    comments = models.CharField(max_length=1000, blank=True, null=True)
+    price = models.CharField(max_length=100, blank=True, null=True)
+    who_handly = models.CharField(max_length=20, blank=True, null=True)
+    first_category = models.CharField(max_length=20, blank=True, null=True)
+    second_category = models.CharField(max_length=20, blank=True, null=True)
+    third_category = models.CharField(max_length=20, blank=True, null=True)
+    address = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -404,6 +593,30 @@ class JdProductParfum(models.Model):
 
 
 class JdProductSolidPerfume(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=20, blank=True, null=True)
+    store = models.CharField(max_length=50, blank=True, null=True)
+    whole_kg = models.CharField(max_length=20, blank=True, null=True)
+    brand = models.CharField(max_length=20, blank=True, null=True)
+    packing = models.CharField(max_length=20, blank=True, null=True)
+    perfume_note = models.CharField(max_length=20, blank=True, null=True)
+    kg = models.CharField(max_length=20, blank=True, null=True)
+    classify = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    good_for_who = models.CharField(max_length=100, blank=True, null=True)
+    price = models.CharField(max_length=10, blank=True, null=True)
+    who_handly = models.CharField(max_length=10, blank=True, null=True)
+    comment_count = models.CharField(max_length=10, blank=True, null=True)
+    comments = models.CharField(max_length=4000, blank=True, null=True)
+    first_category = models.CharField(max_length=20, blank=True, null=True)
+    second_category = models.CharField(max_length=20, blank=True, null=True)
+    third_category = models.CharField(max_length=20, blank=True, null=True)
+    address = models.CharField(max_length=200, blank=True, null=True)
+    img1_address = models.CharField(max_length=100, blank=True, null=True)
+    img2_address = models.CharField(max_length=100, blank=True, null=True)
+    img3_address = models.CharField(max_length=100, blank=True, null=True)
+    img4_address = models.CharField(max_length=100, blank=True, null=True)
+    img5_address = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False

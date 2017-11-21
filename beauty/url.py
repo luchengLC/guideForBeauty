@@ -19,6 +19,7 @@ from beauty import views
 urlpatterns = [
     url(r'show_student$', views.show_student, ),
     url(r'add_student$', views.show_student, ),
-    url(r'show_baseMakeup$', views.show_baseMakeup, ),
+    url(r'show_baseMakeup$', views.show_baseMakeup, ),  # 这个估计可以删掉
     url(r'show_list$', views.show_list, ),
+    url(r'show_search_list$', views.show_search_list, ),
 ]

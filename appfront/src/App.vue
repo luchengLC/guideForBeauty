@@ -6,7 +6,8 @@
 
 <script>
 export default {
-  name: 'app'
+  urlHeader: 'http://127.0.0.1:8000/beauty/',
+  name: 'app',
 }
 </script>
 
