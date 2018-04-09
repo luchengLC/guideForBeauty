@@ -1,6 +1,8 @@
 <template>
   <div class="main">
     <topBar></topBar>
+    <contents></contents>
+    <bfooter></bfooter>
   </div>
 </template>
 
@@ -8,9 +10,8 @@
   import 'normalize.css/normalize.css'
   import '../../assets/reset.css'
   import TopBar from './parts/TopBar'
-//  import TopHeader from './TopHeader'
-//  import MainPage from './MainPage'
-//  import MiFooter from './MiFooter'
+  import Contents from './parts/Contents'
+  import BFooter from './parts/Footer'
   export default {
     name: 'main',
     data () {
@@ -20,15 +21,14 @@
     },
     components: {
       'topBar': TopBar,
-//      'topHeader': TopHeader,
-//      'mainPage': MainPage,
-//      'miFooter': MiFooter
+      'contents': Contents,
+      'bfooter': BFooter
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
   h1, h2 {
     font-weight: normal;
   }
@@ -45,5 +45,17 @@
 
   a {
     color: #42b983;
+  }
+
+  .main {
+    display: -webkit-flex; /* Safari  chrome */
+    display: flex;
+    flex-direction: column; /* 方向 列   上到下*/
+
+    background: #f5f5f5;
+
+    .bottom {
+      background: #fff;
+    }
   }
 </style>
