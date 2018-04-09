@@ -13,10 +13,10 @@
   import Contents from './parts/FocusContents'
   import BFooter from './parts/Footer'
   export default {
-    name: 'main',
+    activeIndex: 'focus',
     data () {
       return {
-        activeIndex: 'focus'
+
       }
     },
     components: {

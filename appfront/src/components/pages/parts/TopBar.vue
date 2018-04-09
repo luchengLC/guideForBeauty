@@ -13,7 +13,8 @@
       <el-menu-item class="el-menu-item" index="focus">我的降价通知商品</el-menu-item>
       <el-menu-item class="el-menu-item" id="logout" @click="dialogRegisterVisible=true">{{register}}
       </el-menu-item>
-      <el-menu-item class="el-menu-item" id="name-login"  @click="dialogLoginVisible=true">{{login_out}}</el-menu-item>
+      <el-menu-item class="el-menu-item" id="name-login" @click="dialogLoginVisible=true">{{login_out}}
+      </el-menu-item>
 
     </el-menu>
 

@@ -13,10 +13,10 @@
   import Contents from './parts/Contents'
   import BFooter from './parts/Footer'
   export default {
-    name: 'main',
+    activeIndex: '/',
     data () {
       return {
-        activeIndex: '/'
+
       }
     },
     components: {
