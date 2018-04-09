@@ -1,18 +1,19 @@
 <template>
   <div style="margin: 0; padding: 0">
     <el-menu
-      :default-active="activeIndex2"
+      :default-active="activeIndex"
       class="el-menu"
       mode="horizontal"
       @select="handleSelect"
+      router
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ff8080">
-      <el-menu-item class="el-menu-item" index="1">美妆商品导购系统</el-menu-item>
-      <el-menu-item class="el-menu-item" index="2">我的降价通知商品</el-menu-item>
-      <el-menu-item class="el-menu-item" id="logout" index="3" @click="dialogRegisterVisible=true">{{register}}
+      <el-menu-item class="el-menu-item" index="/">美妆商品导购系统</el-menu-item>
+      <el-menu-item class="el-menu-item" index="focus">我的降价通知商品</el-menu-item>
+      <el-menu-item class="el-menu-item" id="logout" @click="dialogRegisterVisible=true">{{register}}
       </el-menu-item>
-      <el-menu-item class="el-menu-item" id="name-login" index="4"  @click="dialogLoginVisible=true">{{login_out}}</el-menu-item>
+      <el-menu-item class="el-menu-item" id="name-login"  @click="dialogLoginVisible=true">{{login_out}}</el-menu-item>
 
     </el-menu>
 

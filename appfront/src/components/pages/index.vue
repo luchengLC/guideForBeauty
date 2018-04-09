@@ -16,7 +16,7 @@
     name: 'main',
     data () {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        activeIndex: '/'
       }
     },
     components: {
