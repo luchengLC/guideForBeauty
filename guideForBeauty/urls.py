@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
+from beauty.lcj.handler import database_handler
 
 import beauty
 from beauty import views
@@ -25,4 +26,5 @@ urlpatterns = [
     url(r'^beauty/', include("beauty.url"), ),
     url(r'^$', TemplateView.as_view(template_name="index.html")),
     url(r'^focus/$', TemplateView.as_view(template_name="index.html")),
+    url(r'^productsList/getProductsPage', database_handler.handle_search),
 ]
