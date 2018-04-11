@@ -80,16 +80,16 @@ def handle_sql_results(tables,keywords,page_no):
                     item[5] = float(comment_num)
             all_list.append(item)
 
+    result = {}
     if len(all_list) ==0:
-        result = {}
-        result['count'] = 0
+        result['error_code'] = 1
+        result['msg'] = '搜索不出对应的产品!'
         result['page_count'] = 0
         return result
 
     all_list.sort(key=itemgetter(5,4), reverse=True)
 
-    result = {}
-    count = 0
+    items = []
     start = (page_no-1)*20
     for i in range(start,start+20):
         if(i<len(all_list)):
@@ -98,22 +98,23 @@ def handle_sql_results(tables,keywords,page_no):
             temp["price"] = float(all_list[i][1])
             temp["img1_address"] = all_list[i][2]
             temp["address"] = all_list[i][3]
-            # if all_list[i][4].find('%')<=0:
-            #     temp["good_comment_percentage"] = all_list[i][4]+'%'
-            # else:
             temp["good_comment_percentage"] = all_list[i][4]
             temp["comment_count"] = int(all_list[i][5])
             temp["platform"] = all_list[i][6]
             temp["description"] = all_list[i][7]
-            result[str(count)] = temp
-            count += 1
+            items.append(temp)
 
-    result['count'] = count
+    data = {}
+    data['item_list'] = items
+    result['error_code'] = 0
+    result['msg'] = 'success'
+    result['data'] = data
+
+
     page_count = int(len(all_list)/20)
     if len(all_list)%20>0 :
         page_count +=1
     result['page_count'] = page_count
-
     return result
 
 def get_products_page(keyword,page_no):
@@ -121,43 +122,26 @@ def get_products_page(keyword,page_no):
     tables = result[0]
     keywords = result[1]
     result = handle_sql_results(tables, keywords, page_no)
-    # print(result)
-    lenght = int(result['count'])
+    print(result)
     page_count = int(result['page_count'])
-    print(lenght,page_count)
 
-    if lenght > 0:
-        pass
-        # for i in range(0, lenght):
-        #         print(result[str(i)])
-    elif page_count==0:
+    if page_count==0:
         tables = get_other_tables(tables)
-        result = json.loads(handle_sql_results(tables, keywords, page_no))
-        lenght = int(result['count'])
-        page_count = int(result['page_count'])
-        # print(result)
-        # print(lenght, page_count)
-        if lenght > 0:
-            for i in range(0, lenght):
-                print(result[str(i)])
-
-    # print(result)
+        result = handle_sql_results(tables, keywords, page_no)
     return result
 
 
 @require_http_methods(["GET"])
 def handle_search(request):
-    if request.method == 'GET':
-        keywords = request.GET.get('searchKeyWords')
+        keywords = request.GET.get('wd')
         page_no = request.GET.get('PageNo')
-        # print (request)
         print (keywords,page_no)
         results = get_products_page(keywords,int(page_no))
         print (results)
         return JsonResponse(results,safe=False)
 
 if __name__ == '__main__':
-    # http://127.0.0.1:8000/productsList/getProductsPage?searchKeyWords=美宝莲唇彩&PageNo=1
+    # http://127.0.0.1:8000/productsList/getProductsPage?wd=卡姿兰蜗牛气垫调控霜&PageNo=1
     keyword = '卡姿兰蜗牛气垫调控霜'
     # keyword = '女士淡香'
     page_no = 4
