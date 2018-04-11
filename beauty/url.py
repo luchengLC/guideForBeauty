@@ -25,5 +25,9 @@ urlpatterns = [
     url(r'show_search_list$', views.show_search_list, ),
 
     #  cj 接口路由
+<<<<<<< HEAD
     url(r'productsList/getProductsPage$', mapping_handler.handle_search),
+=======
+    url(r'^productsList/getProductsPage', mapping_handler.handle_search),
+>>>>>>> 9037573697a6937d5d839e12eeaf91449216126e
 ]

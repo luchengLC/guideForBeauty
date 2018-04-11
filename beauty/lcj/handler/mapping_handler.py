@@ -143,7 +143,7 @@ if __name__ == '__main__':
     # http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=卡姿兰蜗牛气垫调控霜&PageNo=1
     # keyword = '卡姿兰蜗牛气垫调控霜'
     keyword = '卡姿兰'
-    page_no = 2
+    page_no = 1
     get_products_page(keyword,page_no)
 
     # E:\ComputerScience\4.2 - Senior\Mine\guideForBeauty\beauty\lcj\handler\mapping_handler.py

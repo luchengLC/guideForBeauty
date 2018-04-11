@@ -14,11 +14,11 @@
       <h2>{{showWords}}</h2>
       <div class="goods-container">
         <div class="goods-item" v-for="(item,index) in hotGoods" :key="index">
-          <a :href="item.link">
-            <img :src="item.imgUrl" alt="">
-            <p class="title">{{item.title}}</p>
+          <a :href="item.address" :title="item.name">
+            <img :src="item.img1_address" alt="item.name">
+            <p class="title">{{item.name}}</p>
           </a>
-          <p class="text">{{item.text}}</p>
+          <p class="text">{{item.description}}</p>
           <div class="btn-div">
             <p class="price">{{item.price}}</p>
             <el-button class="price-btn" type="text">移除关注</el-button>
@@ -54,29 +54,29 @@
         hotGoods: [
 
           {
-            title: '草木良品 粉扑',
-            text: '三层气垫美妆粉扑 7片装',
+            name: '草木良品 粉扑',
+            description: '三层气垫美妆粉扑 7片装',
             price: '29.80元',
-            imgUrl: 'https://img14.360buyimg.com/n7/jfs/t3181/1/7063487291/356223/dd098dcf/58afec60Ne696710b.jpg',
-            link: 'https://item.jd.com/4500384.html',
+            img1_address: 'https://img14.360buyimg.com/n7/jfs/t3181/1/7063487291/356223/dd098dcf/58afec60Ne696710b.jpg',
+            address: 'https://item.jd.com/4500384.html',
             store: '佚名',
             platform: '京东',
           },
           {
-            title: '贝德玛（Bioderma）',
-            text: '舒妍多效洁肤液500ml',
+            name: '贝德玛（Bioderma）',
+            description: '舒妍多效洁肤液500ml',
             price: '29.80元',
-            imgUrl: 'https://img11.360buyimg.com/n7/jfs/t5314/278/1411992625/75643/48151408/59102922Nb437b10f.jpg',
-            link: 'https://item.jd.com/234366.html',
+            img1_address: 'https://img11.360buyimg.com/n7/jfs/t5314/278/1411992625/75643/48151408/59102922Nb437b10f.jpg',
+            address: 'https://item.jd.com/234366.html',
             store: '佚名',
             platform: '京东',
           },
           {
-            title: '玛丽黛佳（MARIEDALGAR）',
-            text: '自然生动眉笔0.2g*2 05 棕色',
+            name: '玛丽黛佳（MARIEDALGAR）',
+            description: '自然生动眉笔0.2g*2 05 棕色',
             price: '29.80元',
-            imgUrl: 'https://img11.360buyimg.com/n7/jfs/t4441/91/2516213441/99992/412ca7fd/58f0809dN9ce5c595.jpg',
-            link: 'https://item.jd.com/1133491.html',
+            img1_address: 'https://img11.360buyimg.com/n7/jfs/t4441/91/2516213441/99992/412ca7fd/58f0809dN9ce5c595.jpg',
+            address: 'https://item.jd.com/1133491.html',
             store: '佚名',
             platform: '京东',
           }
@@ -152,6 +152,11 @@
             }
             .title {
               margin-top: 10px;
+              overflow:hidden;
+              text-overflow:ellipsis;
+              -o-text-overflow:ellipsis;
+              white-space:nowrap;
+              width:180px;
             }
           }
           .text {
