@@ -16,8 +16,6 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
-
-
 import beauty
 from beauty import views
 
@@ -29,4 +27,5 @@ urlpatterns = [
 
     # 这个页面的路由是前端页面路由
     # 后台接口路由请放到beauty下的url.py中
+
 ]
