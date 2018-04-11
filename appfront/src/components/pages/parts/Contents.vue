@@ -16,8 +16,8 @@
       <h2>{{showWords}}</h2>
       <div class="goods-container">
         <div class="goods-item" v-for="(item, index) in searchGoods" :key="index">
-          <a :href="item.address">
-            <img :src="item.img1_address" alt="">
+          <a :href="item.address" :title="item.name">
+            <img :src="item.img1_address" alt="item.name">
             <p class="title">{{item.name}}</p>
           </a>
           <!--<p class="text">{{item.description}}</p>-->
@@ -36,13 +36,13 @@
 
 
     <!--分页器-->
-    <!--<div style="margin: 50px 0 20px 0; padding: 0;">-->
-    <!--<el-pagination-->
-    <!--background-->
-    <!--layout="prev, pager, next"-->
-    <!--:total="1000">-->
-    <!--</el-pagination>-->
-    <!--</div>-->
+    <div style="margin: 50px 0 20px 0; padding: 0;">
+    <el-pagination
+    background
+    layout="prev, pager, next"
+    :total= "pageCount">
+    </el-pagination>
+    </div>
 
   </div>
 </template>
@@ -54,56 +54,70 @@
 
     data () {
       return {
+        res: {},
         input: '',
         showWords: '',
-//        searchGoods:[],
-        searchGoods: [
-          {
-            name: '草木良品 粉扑',
-            description: '三层气垫美妆粉扑 7片装',
-            price: '29.80元',
-            img1_address: 'https://img14.360buyimg.com/n7/jfs/t3181/1/7063487291/356223/dd098dcf/58afec60Ne696710b.jpg',
-            address: 'https://item.jd.com/4500384.html',
-            store: '佚名',
-            platform: '京东',
-          },
-          {
-            name: '贝德玛（Bioderma）',
-            description: '舒妍多效洁肤液500ml',
-            price: '29.80元',
-            img1_address: 'https://img11.360buyimg.com/n7/jfs/t5314/278/1411992625/75643/48151408/59102922Nb437b10f.jpg',
-            address: 'https://item.jd.com/234366.html',
-            store: '佚名',
-            platform: '京东',
-          },
-          {
-            name: '玛丽黛佳（MARIEDALGAR）',
-            description: '自然生动眉笔0.2g*2 05 棕色',
-            price: '29.80元',
-            img1_address: 'https://img11.360buyimg.com/n7/jfs/t4441/91/2516213441/99992/412ca7fd/58f0809dN9ce5c595.jpg',
-            address: 'https://item.jd.com/1133491.html',
-            store: '佚名',
-            platform: '京东',
-          }
-        ]
+        pageCount: 0,
+        searchGoods:[],
+//        searchGoods: [
+//          {
+//            name: '草木良品 粉扑',
+//            description: '三层气垫美妆粉扑 7片装',
+//            price: '29.80元',
+//            img1_address: 'https://img14.360buyimg.com/n7/jfs/t3181/1/7063487291/356223/dd098dcf/58afec60Ne696710b.jpg',
+//            address: 'https://item.jd.com/4500384.html',
+//            store: '佚名',
+//            platform: '京东',
+//          },
+//          {
+//            name: '贝德玛（Bioderma）',
+//            description: '舒妍多效洁肤液500ml',
+//            price: '29.80元',
+//            img1_address: 'https://img11.360buyimg.com/n7/jfs/t5314/278/1411992625/75643/48151408/59102922Nb437b10f.jpg',
+//            address: 'https://item.jd.com/234366.html',
+//            store: '佚名',
+//            platform: '京东',
+//          },
+//          {
+//            name: '玛丽黛佳（MARIEDALGAR）',
+//            description: '自然生动眉笔0.2g*2 05 棕色',
+//            price: '29.80元',
+//            img1_address: 'https://img11.360buyimg.com/n7/jfs/t4441/91/2516213441/99992/412ca7fd/58f0809dN9ce5c595.jpg',
+//            address: 'https://item.jd.com/1133491.html',
+//            store: '佚名',
+//            platform: '京东',
+//          }
+//        ]
       }
     },
     methods: {
         searchWithPage(pageNo){
-          let kw = this.input.replace(' ', '%20');
-          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=' + kw + '&PageNo=' + pageNo)
-            .then((response) => {
-            let res = response.data
-            if (res.error_code === 0) {
-              // 成功
-              console.log(res)
-              this.searchGoods = [].concat(res.item_list)
+          if (this.input === '') {
+            this.$message.error('请输入搜索信息！')
+          } else {
+            let kw = this.input.replace(' ', '%20');
+            this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=' + kw + '&PageNo=' + pageNo)
+              .then((response) => {
+                this.res = response.data
+                if (this.res.error_code === 0) {
+                  // 成功
+                  let ress = this.res['data']['item_list']
+                  // emmmmmm， 将小图换成大图
+                  for (let i in ress) {
+                    ress[i]['img1_address'] = ress[i]['img1_address'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
+                  }
 
-            } else {  // 失败
-              this.$message.error('没有查找到对应的商品，请重试！')
-              console.log(res['msg'])
-            }
-          })
+                  this.searchGoods = this.res['data']['item_list']
+                  // page数
+                  this.pageCount = this.res['page_count']*10
+
+                } else {  // 失败
+                  this.$message.error('没有查找到对应的商品，请重试！')
+                  console.log(this.res['msg'])
+                }
+              })
+          }
+
         }
     }
 
@@ -176,6 +190,11 @@
             }
             .title {
               margin-top: 10px;
+              overflow:hidden;
+              text-overflow:ellipsis;
+              -o-text-overflow:ellipsis;
+              white-space:nowrap;
+              width:180px;
             }
           }
           .text {

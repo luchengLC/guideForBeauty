@@ -4,7 +4,7 @@ import os
 from operator import itemgetter
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from lcj.handler import database_handler
+from beauty.lcj.handler import database_handler
 import jieba
 
 file_path = (os.path.dirname(os.path.dirname(os.path.abspath("mapping_handler.py"))) + '/data/').replace('\\','/')

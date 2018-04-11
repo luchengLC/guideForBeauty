@@ -12,16 +12,25 @@ export default new Router({
   routes: [
     {
       path: '/',   // 主页
+      meta: {
+        keepAlive: true,
+      },
       name: 'index',
       component: Index
     },
     {
       path: '/focus',   //  降价通知商品页
+      meta: {
+        keepAlive: true,
+      },
       name: 'focus',
       component: Focus
     },
     {
       path: '/test',  // 测试页
+      meta: {
+        keepAlive: true,
+      },
       name: 'Test',
       component: Home
     },
