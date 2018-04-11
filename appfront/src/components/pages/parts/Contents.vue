@@ -4,8 +4,8 @@
     <!--搜索框-->
     <div class="search-bar">
       <div class="div-input">
-        <el-input class="search-input" placeholder="请输入内容" v-model="input5"></el-input>
-        <el-button class="search-btn" slot="append" icon="el-icon-search"></el-button>
+        <el-input class="search-input" placeholder="请输入内容" v-model="input"></el-input>
+        <el-button class="search-btn" slot="append" icon="el-icon-search" @click="searchWithPage(1)"></el-button>
       </div>
     </div>
 
@@ -13,7 +13,7 @@
     <div class="hot-search">
       <h2>{{showWords}}</h2>
       <div class="goods-container">
-        <div class="goods-item" v-for="(item,index) in hotGoods" :key="index">
+        <div class="goods-item" v-for="(item,index) in searchGoods" :key="index">
           <a :href="item.link">
             <img :src="item.imgUrl" alt="">
             <p class="title">{{item.title}}</p>
@@ -51,8 +51,9 @@
     components: {ElButton},
     data () {
       return {
-        showWords: '今日热搜',
-        hotGoods: [
+        input: '',
+        showWords: '',
+        searchGoods: [
           {
             title: '草木良品 粉扑',
             text: '三层气垫美妆粉扑 7片装',
@@ -118,7 +119,24 @@
           }
         ]
       }
+    },
+    methods: {
+        searchWithPage(pageNo){
+          let kw = this.input.replace(' ', '%20');
+          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?searchKeyWords=' + kw + '&PageNo=' + pageNo)
+            .then((response) => {
+            let res = response.data
+            if (res.error_num === 0) {
+              //  刷新，重新请求
+
+            } else {
+              this.$message.error('没有查找到对应的商品，请重试！')
+              console.log(res['msg'])
+            }
+          })
+        }
     }
+
   }
 </script>
 

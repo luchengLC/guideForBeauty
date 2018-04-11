@@ -83,7 +83,7 @@
               //  刷新，重新请求
               this.showStu()
             } else {
-              this.$message.error('新增学生信息失败，请重试')
+              this.$message.error('没有查找到对应的商品，请重试！')
               console.log(res['msg'])
             }
           })
