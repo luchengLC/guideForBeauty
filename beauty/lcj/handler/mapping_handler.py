@@ -126,7 +126,7 @@ def handle_search(request):
 if __name__ == '__main__':
     # http://127.0.0.1:8000/productsList/getProductsPage?wd=卡姿兰蜗牛气垫调控霜&PageNo=1
     keyword = '卡姿兰蜗牛气垫调控霜'
-    page_no = 2
+    page_no = 3
     get_products_page(keyword,page_no)
 
 
