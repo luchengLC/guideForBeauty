@@ -44,7 +44,7 @@ def handle_sql_results(tables,keywords,page_no):
     #获取需要进行查询的sql语句
     sql_list = []
     for i in tables:
-        sql = 'select name,price,img1_address,address,good_comment_percentage,comment_count,platform,description from '+i+' where locate(%s, description)>0'
+        sql = 'select name,price,img1_address,address,good_comment_percentage,comment_count,platform,description,category from '+i+' where locate(%s, description)>0'
         for j in range(len(keywords)-1):
             sql = sql+' and locate(%s, description)>0'
         sql_list.append(sql)
@@ -102,6 +102,7 @@ def handle_sql_results(tables,keywords,page_no):
             temp["comment_count"] = all_list[i][5]
             temp["platform"] = all_list[i][6]
             temp["description"] = all_list[i][7]
+            temp['category '] = all_list[i][8]
             items.append(temp)
 
     data = {}
@@ -151,6 +152,11 @@ if __name__ == '__main__':
     # select count(name) from product_lipstick where description like '%卡姿兰%' and description like '%蜗牛气垫%' ;
     # select count(*) from product_baseMakeup where locate( '滋润', description) > 0;
     # select count(*) from product_baseMakeup where description like '%滋润%' ;
+    #select count(name)  from product_lipstick where description like '%彩妆%' ;
+    #select count(name)  from product_lipstick where locate( '彩妆', description)>0;
+    #ALTER TABLE product_lipstick ADD FULLTEXT INDEX search_index (description);
+    #SELECT count(name) FROM product_lipstick WHERE MATCH(description) AGAINST('ysl');
+
 
 
 
