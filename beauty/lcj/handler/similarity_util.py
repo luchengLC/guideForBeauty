@@ -7,13 +7,13 @@ import re
 from gensim.models import word2vec
 from stanfordcorenlp import StanfordCoreNLP
 from gensim import corpora, models, similarities
-from lcj.handler import database_handler
-from lcj.handler import file_util
+from beauty.lcj.handler import database_handler
+from beauty.lcj.handler import file_util
 
 file_path = (os.path.dirname(os.path.dirname(os.path.abspath("similarity_util.py"))) + '/data/').replace('\\', '/')
 
 #根据topK words 找出跟这些词最接近的词汇
-def get_similar_type(file_path,keywords):
+def get_similar_type(keywords):
     tables = ['眼','唇','香水','底妆']
     sentences=word2vec.Text8Corpus(file_path+"train_files/descriptions.txt")
     model=word2vec.Word2Vec(sentences, size=100)

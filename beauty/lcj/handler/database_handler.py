@@ -3,8 +3,9 @@
 import pymysql
 
 def execute_sql(sql,data):
-    # print(sql)
+    print (sql)
     try:
+        db = ''
         db = pymysql.connect(host="39.108.185.66", user="root", password="1234", db="beautyGirls_database", port=3306,
                              charset="utf8")
         cur = db.cursor()  # 获取操作游标
@@ -12,9 +13,10 @@ def execute_sql(sql,data):
         results = cur.fetchall()  # 获取查询的所有记录
         if len(results) <= 0:
             print("no such items in this table")
-        return results
+        return 1,results
     except Exception as err:
         print("handler err:"+str(err))
-        return []
+        return -1,str(err)
     finally:
-        db.close()  # 关闭连接
+        if db!='':
+            db.close()  # 关闭连接
