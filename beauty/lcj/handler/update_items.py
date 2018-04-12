@@ -1,9 +1,6 @@
-from lcj import JD_spider
-from lcj import JD_hk_spider
-from lcj import JD_item
-import datetime
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
 import pymysql
-from bs4 import BeautifulSoup as bs
 
 def updateDB_baseMakeup(item,tableName):
     db = pymysql.connect(host="39.108.185.66", user="root", password="1234", db="beautyGirls_database", port=3306,

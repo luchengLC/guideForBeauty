@@ -11,7 +11,7 @@ import jieba
 import random
 import os
 
-from BeautifulGirls.lcj.spider import proxy_ip
+from lcj.spider import proxy_ip
 
 class Spider:
     PROXY = {}

@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
-# from BeautifulGirls.lcj.spider import phone_item
+# from BeautifulGirls.cj.spider import phone_item
 from BeautifulGirls.lcj.spider import jd_spider
-from BeautifulGirls.lcj.spider import html_analysis
+from lcj.spider import html_analysis
 import jieba.analyse
-# from BeautifulGirls.lcj.handler import database_handler
+# from BeautifulGirls.cj.handler import database_handler
 import os
 
 #获取商品的url，以便接下来进行处理

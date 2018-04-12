@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from beauty import views
-from beauty.lcj.handler import database_handler
+from beauty.lcj.handler import mapping_handler
 
 urlpatterns = [
     url(r'show_student$', views.show_student, ),
@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'show_search_list$', views.show_search_list, ),
 
     #  cj 接口路由
-    url(r'^productsList/getProductsPage', database_handler.handle_search),
+    url(r'productsList/getProductsPage', mapping_handler.handle_search),
 ]
