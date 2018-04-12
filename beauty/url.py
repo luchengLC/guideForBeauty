@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from beauty import views
 from beauty.lcj.handler import mapping_handler
+from beauty.hmy.handler import get_similar_products
 
 urlpatterns = [
     url(r'show_student$', views.show_student, ),
@@ -26,4 +27,7 @@ urlpatterns = [
 
     #  cj 接口路由
     url(r'productsList/getProductsPage', mapping_handler.handle_search),
+
+    #hmy接口路由
+    url(r'productsList/getAllSimilarProducts',get_similar_products.handle_search),
 ]
