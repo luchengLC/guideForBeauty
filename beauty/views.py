@@ -8,6 +8,8 @@ from beauty.models import LcTest, JdHkProductBasemakeup, JdHkProductCologne, JdH
     JdHkProductEye
 
 
+
+
 # 测试
 @require_http_methods(["GET"])
 def show_student(request):

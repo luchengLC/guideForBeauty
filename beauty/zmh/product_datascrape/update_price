@@ -1,0 +1,21 @@
+    # 获取京东价格
+    def GetJDProductPrice(self,url):
+        # 缺失异常处理
+		if url is None:
+			print("The url is error.the returned price is empty string")
+			return ""
+		else:
+			try:
+				skuId = url.split('/')[-1].strip(".html")
+				print(skuId)
+				price_url = "https://p.3.cn/prices/mgets?skuIds=J_" + skuId
+				result = ""
+				content = json.loads(self.getHtml(price_url).decode("utf-8"))
+				result = content[0]['op']
+				return result
+			except Exception as e:
+				print(e)
+				
+	# 获取唯品会价格
+	
+				
