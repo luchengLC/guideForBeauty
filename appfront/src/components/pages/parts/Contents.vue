@@ -6,10 +6,20 @@
       <div class="div-input">
         <el-input class="search-input" placeholder="请输入内容" v-model="input"></el-input>
         <el-button class="search-btn" slot="append" icon="el-icon-search" @click="searchWithPage(1)"></el-button>
+
+
+      </div>
+      <!--价格排序 下拉选择框-->
+      <div>
+        <el-button-group class="order-btn">
+          <el-button plain >默认排序</el-button>
+          <el-button icon="el-icon-arrow-up" plain>升价</el-button>
+          <el-button icon="el-icon-arrow-down" plain>降价</el-button>
+        </el-button-group>
       </div>
     </div>
 
-    <!--价格排序 下拉选择框-->
+
 
     <!--item 表-->
     <div class="hot-search">
@@ -31,7 +41,7 @@
 
 
           <div class="price-div">
-            <p>￥<span class="price">{{item.price}}</span></p>
+            <div class="price-p">￥<span class="price">{{item.price}}</span></div>
             <div class="btn-div">
               <el-button class="price-btn" type="text">降价通知</el-button>
               <el-button class="similar-btn" type="text">找相似物</el-button>
@@ -157,7 +167,15 @@
         .search-btn {
         }
       }
+      .order-btn {
+        margin: 15px 0 15px 40px;
+      }
     }
+
+    /*.order-btn{*/
+      /*width: 70%;*/
+      /*margin: 10px auto 0;*/
+    /*}*/
     .hot-search {
       width: 1226px;
       margin: 26px auto 0;
@@ -215,12 +233,13 @@
             flex-direction: column;
             justify-content: left;
             text-align: left;
-            margin: 0 0 0 60px;
+            margin: 0 0 0 40px;
+            width: 70%;
 
             a {
               margin: 0;
               .title {
-                width: 400px;
+                width: 100%;
                 font-size: 14px;
                 color: #096296;
                 &:hover {
@@ -272,16 +291,20 @@
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
-            margin: 0 0 0 40px;
+            margin: 0;
             padding: 0;
             text-align: right;
-            .price {
-              color: #ff8080;
-              font-size: 24px;
+            .price-p {
+              width: 150px;
+              .price {
+                color: #ff8080;
+                font-size: 24px;
+              }
             }
 
             .btn-div {
-              margin-left: 50px;
+              margin-left: 40px;
+              margin-right: 40px;
               display: -webkit-flex; /* Safari  chrome */
               display: flex;
               flex-direction: column;

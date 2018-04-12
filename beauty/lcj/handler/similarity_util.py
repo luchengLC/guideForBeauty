@@ -5,7 +5,7 @@ import jieba
 import jieba.analyse
 import re
 from gensim.models import word2vec
-from stanfordcorenlp import StanfordCoreNLP
+# from stanfordcorenlp import StanfordCoreNLP
 from gensim import corpora, models, similarities
 from beauty.lcj.handler import database_handler
 from beauty.lcj.handler import file_util
