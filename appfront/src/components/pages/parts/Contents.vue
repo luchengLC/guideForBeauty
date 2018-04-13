@@ -5,7 +5,9 @@
     <div class="search-bar">
       <div class="div-input">
         <el-input class="search-input" placeholder="请输入内容" v-model="input"></el-input>
-        <el-button class="search-btn" slot="append" icon="el-icon-search" @click="searchWithPage(1)"></el-button>
+        <el-button class="search-btn" slot="append" icon="el-icon-search" @click="searchWithPage(1)"
+                   v-loading.fullscreen.lock="fullscreenLoading"
+        ></el-button>
 
 
       </div>
@@ -70,7 +72,7 @@
       width="30%"
       :before-close="handleClose">
       <p>尊敬的用户<span style="color: #FF8080">{{this.username}}</span>,您是否确认关注商品：</p>
-      <p  style="color: #409EFF">{{this.pname}}</p>
+      <p style="color: #409EFF">{{this.pname}}</p>
       <p>的降价变动?</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -91,6 +93,7 @@
       return {
         username: '134000000000',  // 从cookie中拿到的username
         dialogVisible: false,
+        fullscreenLoading: false,
         pname: '',
         res: {},
         input: '',
@@ -139,6 +142,7 @@
         if (this.input === '') {
           this.$message.error('请输入搜索信息！')
         } else {
+          this.fullscreenLoading = true;
           let kw = this.input.replace(' ', '%20');
           this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=' + kw + '&PageNo=' + pageNo)
             .then((response) => {
@@ -157,9 +161,11 @@
 
               } else {  // 失败
                 this.$message.error('没有查找到对应的商品，请重试！')
-                console.log(this.res['msg'])
+                console.log(this.res['msg']);
               }
-            })
+              this.fullscreenLoading = false;
+            });
+
         }
 
       },
@@ -176,7 +182,7 @@
       handleClose(done) {
         this.$message('成功！');
         this.dialogVisible = false;
-      }
+      },
 
     }
 
