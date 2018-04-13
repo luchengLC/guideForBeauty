@@ -1,8 +1,8 @@
 <template>
   <div class="main">
-    <topBar></topBar>
-    <contents></contents>
-    <bfooter></bfooter>
+    <topBar class="topbar"></topBar>
+    <contents class="contents"></contents>
+    <bfooter class="footer"></bfooter>
   </div>
 </template>
 
@@ -28,7 +28,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style lang="scss">
   h1, h2 {
     font-weight: normal;
   }
@@ -51,11 +51,13 @@
     display: -webkit-flex; /* Safari  chrome */
     display: flex;
     flex-direction: column; /* 方向 列   上到下*/
-
+    height: 100%;
     background: #f5f5f5;
+    min-height: 100vh;
 
-    .bottom {
-      background: #fff;
+    .contents {
+      flex: 1;
     }
+
   }
 </style>

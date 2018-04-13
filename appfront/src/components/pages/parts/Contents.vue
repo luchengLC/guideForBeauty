@@ -14,9 +14,9 @@
       <!--价格排序 下拉选择框-->
       <div>
         <el-button-group class="order-btn">
-          <el-button plain>默认排序</el-button>
-          <el-button icon="el-icon-arrow-up" plain>升价</el-button>
-          <el-button icon="el-icon-arrow-down" plain>降价</el-button>
+          <el-button plain @click="order='df'">默认排序</el-button>
+          <el-button @click="order='pu'" icon="el-icon-arrow-up" plain>升价</el-button>
+          <el-button @click="order='pd'" icon="el-icon-arrow-down" plain>降价</el-button>
         </el-button-group>
       </div>
     </div>
@@ -94,6 +94,7 @@
         username: '134000000000',  // 从cookie中拿到的username
         dialogVisible: false,
         fullscreenLoading: false,
+        order: 'df',
         pname: '',
         res: {},
         input: '',
@@ -144,7 +145,8 @@
         } else {
           this.fullscreenLoading = true;
           let kw = this.input.replace(' ', '%20');
-          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=' + kw + '&PageNo=' + pageNo)
+          console.log(this.order);
+          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd='+kw+'&PageNo='+pageNo+'&order='+this.order)
             .then((response) => {
               this.res = response.data
               if (this.res.error_code === 0) {
