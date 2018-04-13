@@ -5,20 +5,21 @@
     <div class="search-bar">
       <div class="div-input">
         <el-input class="search-input" placeholder="请输入内容" v-model="input"></el-input>
-        <el-button class="search-btn" slot="append" icon="el-icon-search" @click="searchWithPage(1)"></el-button>
+        <el-button class="search-btn" slot="append" icon="el-icon-search" @click="searchWithPage(1, order)"
+                   v-loading.fullscreen.lock="fullscreenLoading"
+        ></el-button>
 
 
       </div>
       <!--价格排序 下拉选择框-->
       <div>
         <el-button-group class="order-btn">
-          <el-button plain >默认排序</el-button>
-          <el-button icon="el-icon-arrow-up" plain>升价</el-button>
-          <el-button icon="el-icon-arrow-down" plain>降价</el-button>
+          <el-button plain @click="changeOrder('df')">默认排序</el-button>
+          <el-button @click="changeOrder('pu')" icon="el-icon-arrow-up" plain>升价</el-button>
+          <el-button @click="changeOrder('pd')" icon="el-icon-arrow-down" plain>降价</el-button>
         </el-button-group>
       </div>
     </div>
-
 
 
     <!--item 表-->
@@ -26,12 +27,12 @@
       <h2>{{showWords}}</h2>
       <div class="goods-container">
         <div class="goods-item" v-for="(item, index) in searchGoods" :key="index">
-          <a :href="item.address" :title="item.name">
+          <a :href="item.address" :title="item.name" target="_blank">
             <img :src="item.img1_address" alt="item.name">
           </a>
 
           <div class="info">
-            <a :href="item.address" :title="item.name"><p class="title">{{item.name}}</p></a>
+            <a :href="item.address" :title="item.name" target="_blank"><p class="title">{{item.name}}</p></a>
             <p class="description">{{item.description}}</p>
             <p class="platform">平台： <span>{{item.platform}}</span></p>
             <p class="store">商店： <span>{{item.store}}</span></p>
@@ -43,8 +44,9 @@
           <div class="price-div">
             <div class="price-p">￥<span class="price">{{item.price}}</span></div>
             <div class="btn-div">
-              <el-button class="price-btn" type="text">降价通知</el-button>
-              <el-button class="similar-btn" type="text">找相似物</el-button>
+              <el-button @click="getCutPrice(item, username)" class="price-btn" type="text">降价通知</el-button>
+              <!--<el-button @click="dialogVisible=true" class="price-btn" type="text">降价通知</el-button>-->
+              <el-button @click="getSimilar(item)" class="similar-btn" type="text">找相似物</el-button>
             </div>
           </div>
           <!--<div class="btn-div">-->
@@ -57,11 +59,30 @@
     <!--分页器-->
     <div style="margin: 50px 0 20px 0; padding: 0;">
       <el-pagination
+        @current-change="handleCurrentChange"
         background
         layout="prev, pager, next"
-        :total="pageCount">
+        :page-size = "20"
+        :total="pageCount"
+        :current-page="currentPage">
       </el-pagination>
     </div>
+
+
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <p>尊敬的用户<span style="color: #FF8080">{{this.username}}</span>,您是否确认关注商品：</p>
+      <p style="color: #409EFF">{{this.pname}}</p>
+      <p>的降价变动?</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
 
   </div>
 </template>
@@ -73,55 +94,27 @@
 
     data () {
       return {
+        username: '134000000000',  // 从cookie中拿到的username
+        currentPage: 1,   // 当前页
+        dialogVisible: false,
+        fullscreenLoading: false,
+        order: 'df',
+        pname: '',
         res: {},
         input: '',
         showWords: '',
         pageCount: 0,
-//        searchGoods:[],
-        searchGoods: [
-          {
-            name: '卡姿兰气垫cc霜 蜗牛调控气垫bb霜 持久保湿遮瑕美颜白皙底妆礼盒套装粉底液14.5g*2 02柔缎色+蜜语礼包',
-            description: '三层气垫美妆粉扑 7片装',
-            price: '29.80元',
-            img1_address: 'https://img14.360buyimg.com/n7/jfs/t3181/1/7063487291/356223/dd098dcf/58afec60Ne696710b.jpg',
-            address: 'https://item.jd.com/4500384.html',
-            store: '佚名',
-            platform: '京东',
-            good_comment_percentage: "0.95",
-            comment_count: 11000,
-          },
-          {
-            name: '贝德玛（Bioderma）',
-            description: '舒妍多效洁肤液500ml',
-            price: '29.80元',
-            img1_address: 'https://img11.360buyimg.com/n7/jfs/t5314/278/1411992625/75643/48151408/59102922Nb437b10f.jpg',
-            address: 'https://item.jd.com/234366.html',
-            store: '佚名',
-            platform: '京东',
-            good_comment_percentage: "0.95",
-            comment_count: 11000,
-          },
-          {
-            name: '玛丽黛佳（MARIEDALGAR）',
-            description: '自然生动眉笔0.2g*2 05 棕色',
-            price: '29.80元',
-            img1_address: 'https://img11.360buyimg.com/n7/jfs/t4441/91/2516213441/99992/412ca7fd/58f0809dN9ce5c595.jpg',
-            address: 'https://item.jd.com/1133491.html',
-            store: '佚名',
-            platform: '京东',
-            good_comment_percentage: "0.95",
-            comment_count: 11000,
-          }
-        ]
+        searchGoods: [],
       }
     },
     methods: {
-      searchWithPage(pageNo){
+      searchWithPage(pageNo, order){
         if (this.input === '') {
           this.$message.error('请输入搜索信息！')
         } else {
+          this.fullscreenLoading = true;
           let kw = this.input.replace(' ', '%20');
-          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=' + kw + '&PageNo=' + pageNo)
+          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd='+kw+'&PageNo='+pageNo+'&order='+order)
             .then((response) => {
               this.res = response.data
               if (this.res.error_code === 0) {
@@ -134,15 +127,37 @@
 
                 this.searchGoods = this.res['data']['item_list']
                 // page数
-                this.pageCount = this.res['page_count'] * 10
+                this.pageCount = this.res['page_count'] * 20
 
               } else {  // 失败
                 this.$message.error('没有查找到对应的商品，请重试！')
-                console.log(this.res['msg'])
+                console.log(this.res['msg']);
               }
-            })
-        }
+              this.fullscreenLoading = false;
+            });
 
+        }
+      },
+      changeOrder(order) {
+        this.order = order;
+        this.searchWithPage(1, order);
+      },
+      getCutPrice(item, username) {   // 增-降价通知
+        this.dialogVisible = true;
+        this.pname = item.name
+        console.log(item);
+        console.log(username);
+      },
+      getSimilar(item) {   // 相似商品
+        this.$router.push({name: 'similar', params: {item: item}})
+      },
+
+      handleClose(done) {
+        this.$message('成功！');
+        this.dialogVisible = false;
+      },
+      handleCurrentChange(currentPage) {
+        this.searchWithPage(currentPage, this.order);
       }
     }
 
@@ -173,8 +188,8 @@
     }
 
     /*.order-btn{*/
-      /*width: 70%;*/
-      /*margin: 10px auto 0;*/
+    /*width: 70%;*/
+    /*margin: 10px auto 0;*/
     /*}*/
     .hot-search {
       width: 1226px;

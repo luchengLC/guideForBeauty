@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 // import Main from '@/components/mainPage/index'
 import Index from '@/components/pages/index'
 import Focus from '@/components/pages/focus'
+import Similar from '@/components/pages/similar'
 
 Vue.use(Router)
 
@@ -25,6 +26,14 @@ export default new Router({
       },
       name: 'focus',
       component: Focus
+    },
+    {
+      path: '/similar',   //  相似商品页面
+      meta: {
+        keepAlive: true,
+      },
+      name: 'similar',
+      component: Similar
     },
     {
       path: '/test',  // 测试页

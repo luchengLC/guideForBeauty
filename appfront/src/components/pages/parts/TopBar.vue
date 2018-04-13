@@ -26,7 +26,7 @@
       :before-close="handleLoginClose">
       <div class="el-dialog-div">
         账号：
-        <el-input v-model="input_username" placeholder="账号..." style="width: 300px"></el-input>
+        <el-input v-model="input_username" placeholder="手机号码..." style="width: 300px"></el-input>
       </div>
       <div class="el-dialog-div">
         密码：
@@ -47,7 +47,7 @@
       :before-close="handleRegisterClose">
       <div class="el-dialog-div">
         账 号：
-        <el-input v-model="input_username" placeholder="账号..." style="width: 300px"></el-input>
+        <el-input v-model="input_username" placeholder="手机号码..." style="width: 300px"></el-input>
       </div>
       <div class="el-dialog-div">
         昵 称：
@@ -56,10 +56,6 @@
       <div class="el-dialog-div">
         密 码：
         <el-input v-model="input_pw" placeholder="密码..." style="width: 300px"></el-input>
-      </div>
-      <div class="el-dialog-div">
-        手机号码：
-        <el-input v-model="input_phone" placeholder="手机号码..." style="width: 300px"></el-input>
       </div>
       <div class="el-dialog-div">
         邮 箱：
