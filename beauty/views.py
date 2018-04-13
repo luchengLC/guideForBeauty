@@ -4,8 +4,10 @@ from django.views.decorators.http import require_http_methods
 from django.core import serializers
 import json
 
-from beauty.models import LcTest, JdHkProductBasemakeup, JdHkProductCologne, JdHkProductParfume, JdHkProductLipstick, \
-    JdHkProductEye
+# from beauty.models import LcTest, JdHkProductBasemakeup, JdHkProductCologne, JdHkProductParfume, JdHkProductLipstick, \
+#     JdHkProductEye
+
+
 
 
 # 测试

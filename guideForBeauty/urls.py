@@ -27,5 +27,4 @@ urlpatterns = [
 
     # 这个页面的路由是前端页面路由
     # 后台接口路由请放到beauty下的url.py中
-
 ]

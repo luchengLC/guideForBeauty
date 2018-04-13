@@ -2,7 +2,7 @@
 import urllib.request
 import json
 import pymysql
-import haystack
+# import haystack
 import jieba
 import datetime
 from django.http import JsonResponse

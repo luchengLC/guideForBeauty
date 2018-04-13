@@ -13,15 +13,15 @@
     <div class="hot-search">
       <h2>{{showWords}}</h2>
       <div class="goods-container">
-        <div class="goods-item" v-for="(item,index) in hotGoods" :key="index">
+        <div class="goods-item" v-for="(item,index) in similarGoods" :key="index">
           <a :href="item.address" :title="item.name" target="_blank">
             <img :src="item.img1_address" alt="item.name">
             <p class="title">{{item.name}}</p>
           </a>
-          <p class="text">{{item.description}}</p>
+          <p class="text" :title="item.description">{{item.description}}</p>
           <div class="btn-div">
             <p class="price">{{item.price}}</p>
-            <el-button class="price-btn" type="text">移除关注</el-button>
+            <el-button class="price-btn" type="text">相似商品 待改</el-button>
           </div>
           <div class="btn-div">
             <p class="store">{{item.store}}</p> --
@@ -50,38 +50,17 @@
     components: {ElButton},
     data () {
       return {
-        showWords: '降价通知商品',
-        hotGoods: [
-
-          {
-            name: '草木良品 粉扑',
-            description: '三层气垫美妆粉扑 7片装',
-            price: '29.80元',
-            img1_address: 'https://img14.360buyimg.com/n7/jfs/t3181/1/7063487291/356223/dd098dcf/58afec60Ne696710b.jpg',
-            address: 'https://item.jd.com/4500384.html',
-            store: '佚名',
-            platform: '京东',
-          },
-          {
-            name: '贝德玛（Bioderma）',
-            description: '舒妍多效洁肤液500ml',
-            price: '29.80元',
-            img1_address: 'https://img11.360buyimg.com/n7/jfs/t5314/278/1411992625/75643/48151408/59102922Nb437b10f.jpg',
-            address: 'https://item.jd.com/234366.html',
-            store: '佚名',
-            platform: '京东',
-          },
-          {
-            name: '玛丽黛佳（MARIEDALGAR）',
-            description: '自然生动眉笔0.2g*2 05 棕色',
-            price: '29.80元',
-            img1_address: 'https://img11.360buyimg.com/n7/jfs/t4441/91/2516213441/99992/412ca7fd/58f0809dN9ce5c595.jpg',
-            address: 'https://item.jd.com/1133491.html',
-            store: '佚名',
-            platform: '京东',
-          }
-        ]
+        showWords: '相似商品',
+        similarGoods: []
       }
+    },
+    mounted: function () {
+      //这个是钩子函数
+      this.$nextTick(function () {
+        console.log('sussess')
+        console.log(this.$route.params.item)
+        this.similarGoods.push(this.$route.params.item)
+      })
     }
   }
 </script>
@@ -152,14 +131,20 @@
             }
             .title {
               margin-top: 10px;
-              overflow:hidden;
-              text-overflow:ellipsis;
-              -o-text-overflow:ellipsis;
-              white-space:nowrap;
-              width:180px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              -o-text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 180px;
             }
           }
           .text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 180px;
+
             color: #b0b0b0;
             font-size: 9px;
             margin-top: 5px;
