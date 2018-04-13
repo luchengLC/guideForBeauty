@@ -59,9 +59,12 @@
     <!--分页器-->
     <div style="margin: 50px 0 20px 0; padding: 0;">
       <el-pagination
+        @current-change="handleCurrentChange"
         background
         layout="prev, pager, next"
-        :total="pageCount">
+        :page-size = "20"
+        :total="pageCount"
+        :current-page="currentPage">
       </el-pagination>
     </div>
 
@@ -92,6 +95,7 @@
     data () {
       return {
         username: '134000000000',  // 从cookie中拿到的username
+        currentPage: 1,   // 当前页
         dialogVisible: false,
         fullscreenLoading: false,
         order: 'df',
@@ -159,7 +163,7 @@
 
                 this.searchGoods = this.res['data']['item_list']
                 // page数
-                this.pageCount = this.res['page_count'] * 10
+                this.pageCount = this.res['page_count'] * 20
 
               } else {  // 失败
                 this.$message.error('没有查找到对应的商品，请重试！')
@@ -185,7 +189,10 @@
         this.$message('成功！');
         this.dialogVisible = false;
       },
-
+      handleCurrentChange(currentPage) {
+        console.log(`当前页: ${currentPage}`);
+        this.searchWithPage(currentPage);
+      }
     }
 
   }
