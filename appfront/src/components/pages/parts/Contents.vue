@@ -12,13 +12,12 @@
       <!--价格排序 下拉选择框-->
       <div>
         <el-button-group class="order-btn">
-          <el-button plain >默认排序</el-button>
+          <el-button plain>默认排序</el-button>
           <el-button icon="el-icon-arrow-up" plain>升价</el-button>
           <el-button icon="el-icon-arrow-down" plain>降价</el-button>
         </el-button-group>
       </div>
     </div>
-
 
 
     <!--item 表-->
@@ -43,8 +42,9 @@
           <div class="price-div">
             <div class="price-p">￥<span class="price">{{item.price}}</span></div>
             <div class="btn-div">
-              <el-button class="price-btn" type="text">降价通知</el-button>
-              <el-button class="similar-btn" type="text">找相似物</el-button>
+              <el-button @click="getCutPrice(item, username)" class="price-btn" type="text">降价通知</el-button>
+              <!--<el-button @click="dialogVisible=true" class="price-btn" type="text">降价通知</el-button>-->
+              <el-button @click="getSimilar(item)" class="similar-btn" type="text">找相似物</el-button>
             </div>
           </div>
           <!--<div class="btn-div">-->
@@ -63,6 +63,22 @@
       </el-pagination>
     </div>
 
+
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <p>尊敬的用户<span style="color: #FF8080">{{this.username}}</span>,您是否确认关注商品：</p>
+      <p  style="color: #409EFF">{{this.pname}}</p>
+      <p>的降价变动?</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+
   </div>
 </template>
 
@@ -73,46 +89,49 @@
 
     data () {
       return {
+        username: '134000000000',  // 从cookie中拿到的username
+        dialogVisible: false,
+        pname: '',
         res: {},
         input: '',
         showWords: '',
         pageCount: 0,
-//        searchGoods:[],
-        searchGoods: [
-          {
-            name: '卡姿兰气垫cc霜 蜗牛调控气垫bb霜 持久保湿遮瑕美颜白皙底妆礼盒套装粉底液14.5g*2 02柔缎色+蜜语礼包',
-            description: '三层气垫美妆粉扑 7片装',
-            price: '29.80元',
-            img1_address: 'https://img14.360buyimg.com/n7/jfs/t3181/1/7063487291/356223/dd098dcf/58afec60Ne696710b.jpg',
-            address: 'https://item.jd.com/4500384.html',
-            store: '佚名',
-            platform: '京东',
-            good_comment_percentage: "0.95",
-            comment_count: 11000,
-          },
-          {
-            name: '贝德玛（Bioderma）',
-            description: '舒妍多效洁肤液500ml',
-            price: '29.80元',
-            img1_address: 'https://img11.360buyimg.com/n7/jfs/t5314/278/1411992625/75643/48151408/59102922Nb437b10f.jpg',
-            address: 'https://item.jd.com/234366.html',
-            store: '佚名',
-            platform: '京东',
-            good_comment_percentage: "0.95",
-            comment_count: 11000,
-          },
-          {
-            name: '玛丽黛佳（MARIEDALGAR）',
-            description: '自然生动眉笔0.2g*2 05 棕色',
-            price: '29.80元',
-            img1_address: 'https://img11.360buyimg.com/n7/jfs/t4441/91/2516213441/99992/412ca7fd/58f0809dN9ce5c595.jpg',
-            address: 'https://item.jd.com/1133491.html',
-            store: '佚名',
-            platform: '京东',
-            good_comment_percentage: "0.95",
-            comment_count: 11000,
-          }
-        ]
+        searchGoods: [],
+//        searchGoods: [
+//          {
+//            name: '卡姿兰气垫cc霜 蜗牛调控气垫bb霜 持久保湿遮瑕美颜白皙底妆礼盒套装粉底液14.5g*2 02柔缎色+蜜语礼包',
+//            description: '三层气垫美妆粉扑 7片装',
+//            price: '29.80元',
+//            img1_address: 'https://img14.360buyimg.com/n7/jfs/t3181/1/7063487291/356223/dd098dcf/58afec60Ne696710b.jpg',
+//            address: 'https://item.jd.com/4500384.html',
+//            store: '佚名',
+//            platform: '京东',
+//            good_comment_percentage: "0.95",
+//            comment_count: 11000,
+//          },
+//          {
+//            name: '贝德玛（Bioderma）',
+//            description: '舒妍多效洁肤液500ml',
+//            price: '29.80元',
+//            img1_address: 'https://img11.360buyimg.com/n7/jfs/t5314/278/1411992625/75643/48151408/59102922Nb437b10f.jpg',
+//            address: 'https://item.jd.com/234366.html',
+//            store: '佚名',
+//            platform: '京东',
+//            good_comment_percentage: "0.95",
+//            comment_count: 11000,
+//          },
+//          {
+//            name: '玛丽黛佳（MARIEDALGAR）',
+//            description: '自然生动眉笔0.2g*2 05 棕色',
+//            price: '29.80元',
+//            img1_address: 'https://img11.360buyimg.com/n7/jfs/t4441/91/2516213441/99992/412ca7fd/58f0809dN9ce5c595.jpg',
+//            address: 'https://item.jd.com/1133491.html',
+//            store: '佚名',
+//            platform: '京东',
+//            good_comment_percentage: "0.95",
+//            comment_count: 11000,
+//          }
+//        ]
       }
     },
     methods: {
@@ -143,7 +162,22 @@
             })
         }
 
+      },
+      getCutPrice(item, username) {   // 增-降价通知
+        this.dialogVisible = true;
+        this.pname = item.name
+        console.log(item);
+        console.log(username);
+      },
+      getSimilar(item) {   // 相似商品
+        this.$router.push({name: 'similar', params: {item: item}})
+      },
+
+      handleClose(done) {
+        this.$message('成功！');
+        this.dialogVisible = false;
       }
+
     }
 
   }
@@ -173,8 +207,8 @@
     }
 
     /*.order-btn{*/
-      /*width: 70%;*/
-      /*margin: 10px auto 0;*/
+    /*width: 70%;*/
+    /*margin: 10px auto 0;*/
     /*}*/
     .hot-search {
       width: 1226px;
