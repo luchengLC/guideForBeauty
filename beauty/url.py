@@ -17,17 +17,24 @@ from django.conf.urls import url
 from beauty import views
 from beauty.lcj.handler import mapping_handler
 from beauty.hmy.handler import get_similar_products
+from beauty.zmh.handler import get_cut_price_products
 
 urlpatterns = [
-    url(r'show_student$', views.show_student, ),
-    url(r'add_student$', views.show_student, ),
-    url(r'show_baseMakeup$', views.show_baseMakeup, ),  # 这个估计可以删掉
-    url(r'show_list$', views.show_list, ),
-    url(r'show_search_list$', views.show_search_list, ),
+    # url(r'show_student$', views.show_student, ),
+    # url(r'add_student$', views.show_student, ),
+    # url(r'show_baseMakeup$', views.show_baseMakeup, ),  # 这个估计可以删掉
+    # url(r'show_list$', views.show_list, ),
+    # url(r'show_search_list$', views.show_search_list, ),
 
     #  cj 接口路由
     url(r'productsList/getProductsPage', mapping_handler.handle_search),
 
     #hmy接口路由
     url(r'productsList/getAllSimilarProducts',get_similar_products.handle_search),
+
+    # zmh接口路由
+    url(r'cut_price/get_products',get_cut_price_products.handle_search),
+
+
+
 ]

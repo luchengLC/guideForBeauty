@@ -701,6 +701,7 @@ class ProductBasemakeup(models.Model):
     pa = models.CharField(db_column='PA', max_length=255, blank=True, null=True)  # Field name made lowercase.
     spf = models.CharField(db_column='SPF', max_length=255, blank=True, null=True)  # Field name made lowercase.
     platform = models.CharField(max_length=255, blank=True, null=True)
+    key_words = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -750,6 +751,7 @@ class ProductEye(models.Model):
     who_handly = models.CharField(max_length=255, blank=True, null=True)
     get_time = models.CharField(max_length=255, blank=True, null=True)
     platform = models.CharField(max_length=255, blank=True, null=True)
+    key_words = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -864,6 +866,7 @@ class ProductPerfume(models.Model):
     fragrance = models.CharField(max_length=60, blank=True, null=True)
     sex = models.CharField(max_length=10, blank=True, null=True)
     fragrance_type = models.CharField(max_length=255, blank=True, null=True)
+    key_words = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -877,6 +880,7 @@ class UserCutPriceProduct(models.Model):
     product_platform = models.CharField(max_length=255, blank=True, null=True)
     product_comment_count = models.CharField(max_length=255, blank=True, null=True)
     user_phone = models.CharField(max_length=20, blank=True, null=True)
+    product_img_url = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
