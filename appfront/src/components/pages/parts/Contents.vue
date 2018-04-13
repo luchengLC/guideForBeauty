@@ -5,7 +5,7 @@
     <div class="search-bar">
       <div class="div-input">
         <el-input class="search-input" placeholder="请输入内容" v-model="input"></el-input>
-        <el-button class="search-btn" slot="append" icon="el-icon-search" @click="searchWithPage(1)"
+        <el-button class="search-btn" slot="append" icon="el-icon-search" @click="searchWithPage(1, order)"
                    v-loading.fullscreen.lock="fullscreenLoading"
         ></el-button>
 
@@ -14,9 +14,9 @@
       <!--价格排序 下拉选择框-->
       <div>
         <el-button-group class="order-btn">
-          <el-button plain @click="order='df'">默认排序</el-button>
-          <el-button @click="order='pu'" icon="el-icon-arrow-up" plain>升价</el-button>
-          <el-button @click="order='pd'" icon="el-icon-arrow-down" plain>降价</el-button>
+          <el-button plain @click="changeOrder('df')">默认排序</el-button>
+          <el-button @click="changeOrder('pu')" icon="el-icon-arrow-up" plain>升价</el-button>
+          <el-button @click="changeOrder('pd')" icon="el-icon-arrow-down" plain>降价</el-button>
         </el-button-group>
       </div>
     </div>
@@ -105,52 +105,16 @@
         showWords: '',
         pageCount: 0,
         searchGoods: [],
-//        searchGoods: [
-//          {
-//            name: '卡姿兰气垫cc霜 蜗牛调控气垫bb霜 持久保湿遮瑕美颜白皙底妆礼盒套装粉底液14.5g*2 02柔缎色+蜜语礼包',
-//            description: '三层气垫美妆粉扑 7片装',
-//            price: '29.80元',
-//            img1_address: 'https://img14.360buyimg.com/n7/jfs/t3181/1/7063487291/356223/dd098dcf/58afec60Ne696710b.jpg',
-//            address: 'https://item.jd.com/4500384.html',
-//            store: '佚名',
-//            platform: '京东',
-//            good_comment_percentage: "0.95",
-//            comment_count: 11000,
-//          },
-//          {
-//            name: '贝德玛（Bioderma）',
-//            description: '舒妍多效洁肤液500ml',
-//            price: '29.80元',
-//            img1_address: 'https://img11.360buyimg.com/n7/jfs/t5314/278/1411992625/75643/48151408/59102922Nb437b10f.jpg',
-//            address: 'https://item.jd.com/234366.html',
-//            store: '佚名',
-//            platform: '京东',
-//            good_comment_percentage: "0.95",
-//            comment_count: 11000,
-//          },
-//          {
-//            name: '玛丽黛佳（MARIEDALGAR）',
-//            description: '自然生动眉笔0.2g*2 05 棕色',
-//            price: '29.80元',
-//            img1_address: 'https://img11.360buyimg.com/n7/jfs/t4441/91/2516213441/99992/412ca7fd/58f0809dN9ce5c595.jpg',
-//            address: 'https://item.jd.com/1133491.html',
-//            store: '佚名',
-//            platform: '京东',
-//            good_comment_percentage: "0.95",
-//            comment_count: 11000,
-//          }
-//        ]
       }
     },
     methods: {
-      searchWithPage(pageNo){
+      searchWithPage(pageNo, order){
         if (this.input === '') {
           this.$message.error('请输入搜索信息！')
         } else {
           this.fullscreenLoading = true;
           let kw = this.input.replace(' ', '%20');
-          console.log(this.order);
-          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd='+kw+'&PageNo='+pageNo+'&order='+this.order)
+          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd='+kw+'&PageNo='+pageNo+'&order='+order)
             .then((response) => {
               this.res = response.data
               if (this.res.error_code === 0) {
@@ -173,7 +137,10 @@
             });
 
         }
-
+      },
+      changeOrder(order) {
+        this.order = order;
+        this.searchWithPage(1, order);
       },
       getCutPrice(item, username) {   // 增-降价通知
         this.dialogVisible = true;
@@ -190,8 +157,7 @@
         this.dialogVisible = false;
       },
       handleCurrentChange(currentPage) {
-        console.log(`当前页: ${currentPage}`);
-        this.searchWithPage(currentPage);
+        this.searchWithPage(currentPage, this.order);
       }
     }
 
