@@ -14,7 +14,7 @@
       <h2>{{showWords}}</h2>
       <div class="goods-container">
         <div class="goods-item" v-for="(item,index) in hotGoods" :key="index">
-          <a :href="item.address" :title="item.name">
+          <a :href="item.address" :title="item.name" target="_blank">
             <img :src="item.img1_address" alt="item.name">
             <p class="title">{{item.name}}</p>
           </a>

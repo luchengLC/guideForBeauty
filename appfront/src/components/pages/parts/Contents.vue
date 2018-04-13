@@ -25,12 +25,12 @@
       <h2>{{showWords}}</h2>
       <div class="goods-container">
         <div class="goods-item" v-for="(item, index) in searchGoods" :key="index">
-          <a :href="item.address" :title="item.name">
+          <a :href="item.address" :title="item.name" target="_blank">
             <img :src="item.img1_address" alt="item.name">
           </a>
 
           <div class="info">
-            <a :href="item.address" :title="item.name"><p class="title">{{item.name}}</p></a>
+            <a :href="item.address" :title="item.name" target="_blank"><p class="title">{{item.name}}</p></a>
             <p class="description">{{item.description}}</p>
             <p class="platform">平台： <span>{{item.platform}}</span></p>
             <p class="store">商店： <span>{{item.store}}</span></p>

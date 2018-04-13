@@ -14,7 +14,7 @@
       <h2>{{showWords}}</h2>
       <div class="goods-container">
         <div class="goods-item" v-for="(item,index) in similarGoods" :key="index">
-          <a :href="item.address" :title="item.name">
+          <a :href="item.address" :title="item.name" target="_blank">
             <img :src="item.img1_address" alt="item.name">
             <p class="title">{{item.name}}</p>
           </a>
@@ -50,7 +50,7 @@
     components: {ElButton},
     data () {
       return {
-        showWords: '降价通知商品',
+        showWords: '相似商品',
         similarGoods: []
       }
     },
