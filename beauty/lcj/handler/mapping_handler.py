@@ -10,7 +10,6 @@ import jieba
 
 file_path = (os.path.dirname(os.path.abspath("mapping_handler.py")) + '/beauty/lcj/data/').replace('\\','/')
 
-
 #获取应该去哪些数据库表中查询
 def get_tables_and_keywords(keyword):
     #获取需要模糊匹配的单词
@@ -18,8 +17,9 @@ def get_tables_and_keywords(keyword):
     temp = list(jieba.cut(keyword))
     keywords = []
     for i in temp:
-        keywords.append(i)
-    # print (keywords)
+        if i !=' ':
+            keywords.append(i)
+    print (keywords)
 
     if keyword.find('唇')>=0 or keyword.find('口')>=0 or keyword.find('嘴')>=0:
         tables = ['product_lipstick']
@@ -40,7 +40,7 @@ def get_other_tables(tables):
         kinds.remove(i)
     return kinds
 
-def handle_sql_results(tables,keywords,page_no):
+def handle_sql_results(tables,keywords,page_no,order):
     #获取需要进行查询的sql语句
     sql_list = []
     for i in tables:
@@ -68,16 +68,16 @@ def handle_sql_results(tables,keywords,page_no):
 
         for j in temp:
             item = list(j)
-            comment_num = item[5]
-            index = comment_num.find('万')
-            if index > 0:
-                item[5] = int(float(comment_num[0:index]) * 10000)
-            else:
-                index = comment_num.find('+')
-                if index > 0:
-                    item[5] = float(comment_num[0:index])
-                else:
-                    item[5] = int(comment_num)
+            # comment_num = item[5]
+            # index = comment_num.find('万')
+            # if index > 0:
+            #     item[5] = int(float(comment_num[0:index]) * 10000)
+            # else:
+            #     index = comment_num.find('+')
+            #     if index > 0:
+            #         item[5] = float(comment_num[0:index])
+            #     else:
+            #         item[5] = int(comment_num)
             item[4] = float(item[4])
             all_list.append(item)
 
@@ -87,7 +87,12 @@ def handle_sql_results(tables,keywords,page_no):
         result['page_count'] = 0
         return result
 
-    all_list.sort(key=itemgetter(5,4), reverse=True)
+    if order=='df':
+        all_list.sort(key=itemgetter(5,4), reverse=True)
+    elif order=='pu':
+        all_list.sort(key=itemgetter(1))
+    else:
+        all_list.sort(key=itemgetter(1), reverse=True)
 
     items = []
     start = (page_no-1)*20
@@ -99,7 +104,7 @@ def handle_sql_results(tables,keywords,page_no):
             temp["img1_address"] = all_list[i][2]
             temp["address"] = all_list[i][3]
             temp["good_comment_percentage"] = all_list[i][4]
-            temp["comment_count"] = all_list[i][5]
+            temp["comment_count"] = int(all_list[i][5])
             temp["platform"] = all_list[i][6]
             temp["description"] = all_list[i][7]
             temp['category '] = all_list[i][8]
@@ -117,45 +122,40 @@ def handle_sql_results(tables,keywords,page_no):
     result['page_count'] = page_count
     return result
 
-def get_products_page(keyword,page_no):
+def get_products_page(keyword,page_no,order):
     result = get_tables_and_keywords(keyword)
     tables = result[0]
     keywords = result[1]
-    result = handle_sql_results(tables, keywords, page_no)
-    # print(result)
+    result = handle_sql_results(tables, keywords, page_no,order)
     page_count = int(result['page_count'])
     error_code = int(result['error_code'])
 
     if error_code == 0 and page_count==0:
         tables = get_other_tables(tables)
-        result = handle_sql_results(tables, keywords, page_no)
+        result = handle_sql_results(tables, keywords, page_no,order)
     return result
 
 @require_http_methods(["GET"])
 def handle_search(request):
-        keywords = request.GET.get('wd')
+        keywords = request.GET.get('wd').replace('%20',' ')
         page_no = request.GET.get('PageNo')
-        print (keywords,page_no)
-        results = get_products_page(keywords,int(page_no))
-        print (results)
+        order = request.GET.get('order')
+        # print (keywords,page_no,order)
+        results = get_products_page(keywords,int(page_no),order)
+        # print (results)
         return JsonResponse(results,safe=False)
 
 if __name__ == '__main__':
     # http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=卡姿兰蜗牛气垫调控霜&PageNo=1
+    #http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=美宝莲%20唇妆%20滋润&PageNo=1&order=pd
     # keyword = '卡姿兰蜗牛气垫调控霜'
     keyword = '卡姿兰'
     page_no = 1
     get_products_page(keyword,page_no)
-
     # E:\ComputerScience\4.2 - Senior\Mine\guideForBeauty\beauty\lcj\handler\mapping_handler.py
-    # select count(name) from product_lipstick where locate( '卡姿兰', description) > 0 and locate('蜗牛气垫', description) > 0;
-    # select count(name) from product_lipstick where description like '%卡姿兰%' and description like '%蜗牛气垫%' ;
-    # select count(*) from product_baseMakeup where locate( '滋润', description) > 0;
-    # select count(*) from product_baseMakeup where description like '%滋润%' ;
-    #select count(name)  from product_lipstick where description like '%彩妆%' ;
-    #select count(name)  from product_lipstick where locate( '彩妆', description)>0;
-    #ALTER TABLE product_lipstick ADD FULLTEXT INDEX search_index (description);
-    #SELECT count(name) FROM product_lipstick WHERE MATCH(description) AGAINST('ysl');
+
+
+
 
 
 
