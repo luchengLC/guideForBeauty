@@ -13,10 +13,10 @@
   import Contents from './parts/SimilarContents'
   import BFooter from './parts/Footer'
   export default {
-    activeIndex: 'focus',
+
     data () {
       return {
-
+        activeIndex: 'focus',
       }
     },
     components: {

@@ -4,17 +4,17 @@
       :default-active="activeIndex"
       class="el-menu"
       mode="horizontal"
-      @select="handleSelect"
       router
       background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ff8080">
+      active-text-color="#fff"
+      active-backgroud-color="#545c64"
+      text-color="#fff">
       <el-menu-item class="el-menu-item" index="/">美妆商品导购系统</el-menu-item>
       <el-menu-item class="el-menu-item" index="focus">我的降价通知商品</el-menu-item>
-      <el-menu-item class="el-menu-item" id="logout" @click="dialogRegisterVisible=true">{{register}}
-      </el-menu-item>
-      <el-menu-item class="el-menu-item" id="name-login" @click="dialogLoginVisible=true">{{login_out}}
-      </el-menu-item>
+      <el-button class="menu-btn" type="text" id="logout" @click="dialogRegisterVisible=true">{{register}}
+      </el-button>
+      <el-button class="menu-btn" type="text" id="name-login" @click="dialogLoginVisible=true">{{login_out}}
+      </el-button>
 
     </el-menu>
 
@@ -74,15 +74,29 @@
 </template>
 
 <script>
+  import ElButton from "../../../../node_modules/element-ui/packages/button/src/button";
   export default {
+    components: {ElButton},
+    props: ["actives"],
     data () {
       return {
+        input_username: '',
+        input_name: '',
+        input_pw: '',
+        input_email: '',
         dialogLoginVisible: false,
         dialogRegisterVisible: false,
         msg: 'Welcome to Your Vue.js App',
         register: '注册',
         login_out: '登录',
+        activeIndex: '',
       }
+    },
+    mounted: function() {
+      this.$nextTick(function () {
+        this.activeIndex = this.actives;
+        console.log(this.activeIndex);
+      })
     },
     methods: {
       handleLoginClose(done) {
@@ -97,7 +111,8 @@
       handleRegisterClose(done) {
         this.dialogRegisterVisible = false
       }
-    }
+    },
+
   }
 </script>
 
@@ -107,6 +122,11 @@
     .el-menu-item {
       height: 30px;
       line-height: 30px;
+    }
+    .menu-btn {
+      height: 30px;
+      line-height: 0;
+      margin: 0 20px 0 5px;
     }
 
     #name-login, #logout {
