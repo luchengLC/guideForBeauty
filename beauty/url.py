@@ -17,7 +17,10 @@ from django.conf.urls import url
 from beauty import views
 from beauty.lcj.handler import mapping_handler
 from beauty.hmy.handler import get_similar_products
+from beauty.hmy.handler import login
+from beauty.hmy.handler import register
 from beauty.zmh.handler import get_cut_price_products
+
 
 urlpatterns = [
     # url(r'show_student$', views.show_student, ),
@@ -30,7 +33,12 @@ urlpatterns = [
     url(r'productsList/getProductsPage', mapping_handler.handle_search),
 
     #hmy接口路由
+    #相似商品
     url(r'productsList/getAllSimilarProducts',get_similar_products.handle_search),
+    #注册
+    url(r'user/register',register.handle_register),
+    #登录
+    url(r'user/login',login.handle_login),
 
     # zmh接口路由
     url(r'cut_price/get_products',get_cut_price_products.handle_search),
