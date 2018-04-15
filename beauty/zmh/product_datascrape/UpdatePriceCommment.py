@@ -1,26 +1,22 @@
 #!/usr/bin/python 
 # -*- coding:utf-8 -*-
 
-# !/usr/bin/python
-# -*- coding:utf-8 -*-
-# !/usr/bin/python
-# -*- coding:utf-8 -*-
 import threading
 import time
 import urllib.request
 import urllib
 import json
-import re
-from bs4 import BeautifulSoup
-import pymysql
 import django
 from django.db.models.functions import Now
 import os
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'guideForBeauty.settings'
 django.setup()
-from beauty.models import ProductLipstick
+from beauty.models import ProductLipstick,UserCutPriceProduct
 from django.db.models import Count, Avg, Max, Min, Sum
+
+
+
 
 
 class UpdatePriceCommment:
@@ -121,8 +117,9 @@ class UpdatePriceCommment:
                 # 更新价格和降价通知
                 if new_price != old_price:
                     if new_price < old_price:
+                        # 短信通知
+                        self.inform_price_reduce(url)
                         pass
-                    # 短信通知
                     # 更新价格
                     product.price = new_price
                     print(product.price)
@@ -150,6 +147,20 @@ class UpdatePriceCommment:
         except Exception as e:
             print(e)
             # pass
+
+    def inform_price_reduce(self,url = ""):
+        # 获取关注该商品的用户
+        product_users = UserCutPriceProduct.objects.filter(product_address=url)
+        product_users = list(product_users)
+        # user_phones = []
+        user_phone = ""
+        for p_u in product_users:
+            user_phone = p_u.user_phone
+            # 调用发送短信的方法
+
+
+        pass
+
 if __name__ == '__main__':
     test = UpdatePriceCommment()
     test.__init__()
