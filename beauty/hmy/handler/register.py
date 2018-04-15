@@ -1,5 +1,5 @@
 import pymysql
-from django.shortcuts import render
+from django.http import JsonResponse
 import hashlib
 def handle_register(request):
     user_info={}
@@ -12,7 +12,7 @@ def handle_register(request):
         if data['error_code']==0:
             request.session['username']=user_info['user']
             data['username']=user_info['user']
-    return render(request,'',{'data':data})
+    return JsonResponse(data, safe=False)
 
 def check_register(user_info):
     conn = pymysql.connect(host="39.108.185.66", port=3306, user='root', password='1234', db='beautyGirls_database',

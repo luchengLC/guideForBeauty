@@ -1,17 +1,19 @@
 import pymysql
-from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render
 import hashlib
+from django.http import JsonResponse
 
 def handle_login(request):
     if request.method=='POST':
         user=request.POST.get("username",'')
         pwd=request.POST.get("password",'')
+        # user='119'
+        # pwd='12'
         data=check_login(user,pwd)
         if data['error_code']==0:
             request.session['username']=user
             data['username']=user
-    return render(request,'',{'data':data})
+    return JsonResponse(data,safe=False)
 
 
 def check_login(user,pwd):
@@ -30,19 +32,19 @@ def check_login(user,pwd):
         conn.commit()
         conn.close()
         if res is None:
-            data['error_code']='1'
+            data['error_code']=1
             data['msg']='此用户不存在！'
             return data
         elif pwd!=res[1]:
-            data['error_code']='1'
+            data['error_code']=1
             data['msg']='密码错误！'
             return data
     except Exception as err:
         print(err)
-    data['error_code']='0'
-    data['msg']='success'
+    data['error_code']=0
+    data['msg']='登录成功'
     print(data)
     return data
 
-print(check_login('114','12'))
+print(check_login('119','1'))
 
