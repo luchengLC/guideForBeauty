@@ -12,7 +12,6 @@ def handle_login(request):
         data=check_login(user,pwd)
         if data['error_code']==0:
             request.session['username']=user
-            data['username']=user
     return JsonResponse(data,safe=False)
 
 
@@ -43,8 +42,9 @@ def check_login(user,pwd):
         print(err)
     data['error_code']=0
     data['msg']='登录成功'
+    data['username'] = res[2]
     print(data)
     return data
 
-print(check_login('119','1'))
+print(check_login('13411989237','123456'))
 
