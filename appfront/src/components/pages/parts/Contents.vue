@@ -5,7 +5,7 @@
     <div class="search-bar">
       <div class="div-input">
         <el-input class="search-input" placeholder="请输入内容" v-model="input"></el-input>
-        <el-button class="search-btn" slot="append" icon="el-icon-search" @click="searchWithPage(1, order)"
+        <el-button class="search-btn" slot="append" icon="el-icon-search" @click="search(order)"
                    v-loading.fullscreen.lock="fullscreenLoading"
         ></el-button>
 
@@ -64,7 +64,7 @@
         layout="prev, pager, next"
         :page-size = "20"
         :total="pageCount"
-        :current-page="currentPage">
+        :current-page.sync="currentPage">
       </el-pagination>
     </div>
 
@@ -94,7 +94,7 @@
 
     data () {
       return {
-        username: '134000000000',  // 从cookie中拿到的username
+        username: ' 13411984676',  // 从cookie中拿到的username，假数据
         currentPage: 1,   // 当前页
         dialogVisible: false,
         fullscreenLoading: false,
@@ -138,9 +138,15 @@
 
         }
       },
+      search(order) {
+        this.currentPage = 1;
+        this.order = order;
+        this
+          .handleCurrentChange(1);
+      },
       changeOrder(order) {
         this.order = order;
-        this.searchWithPage(1, order);
+        this.search(order);
       },
       getCutPrice(item, username) {   // 增-降价通知
         this.dialogVisible = true;
@@ -151,9 +157,8 @@
       getSimilar(item) {   // 相似商品
         this.$router.push({name: 'similar', params: {item: item}})
       },
-
       handleClose(done) {
-        this.$message('成功！');
+        this.$message.success('成功！');
         this.dialogVisible = false;
       },
       handleCurrentChange(currentPage) {

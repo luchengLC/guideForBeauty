@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <topBar class="topbar"></topBar>
+    <topBar :actives="activeIndex" class="topbar"></topBar>
     <contents class="contents"></contents>
     <bfooter class="footer"></bfooter>
   </div>
@@ -13,10 +13,10 @@
   import Contents from './parts/Contents'
   import BFooter from './parts/Footer'
   export default {
-    activeIndex: '/',
+
     data () {
       return {
-
+        activeIndex: '/',
       }
     },
     components: {
