@@ -22,14 +22,6 @@ def get_similar_type(keywords):
     type = ''
     try:
         for i in tables:
-            # words = []
-            # words.append(keywords)
-            # for j in model.most_similar(keywords):
-            #     words.append(j[0])
-            # similarity = model.similarity(i,keywords)
-            # if similarity>max:
-            #     type = i
-            #     max = similarity
             similarity = model.similarity(i,keywords)
             if similarity>max:
                 type = i
