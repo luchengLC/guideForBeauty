@@ -21,11 +21,11 @@
           <p class="text" :title="item.description">{{item.description}}</p>
           <div class="btn-div">
             <p class="price">{{item.price}}</p>
-            <el-button class="price-btn" type="text">相似商品 待改</el-button>
+            <el-button class="price-btn" type="text">评论数：{{item.comment_count}}</el-button>
           </div>
           <div class="btn-div">
-            <p class="store">{{item.store}}</p> --
-            <p class="platform">{{item.platform}}</p>
+            <p class="store">{{item.store}}</p>
+            <p class="platform">平台：{{item.platform}}</p>
           </div>
         </div>
       </div>
