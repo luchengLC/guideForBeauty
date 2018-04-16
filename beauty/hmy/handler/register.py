@@ -11,7 +11,6 @@ def handle_register(request):
         data=check_register(user_info)
         if data['error_code']==0:
             request.session['username']=user_info['user']
-            data['username']=user_info['user']
     return JsonResponse(data, safe=False)
 
 def check_register(user_info):
@@ -51,13 +50,14 @@ def check_register(user_info):
 
     data['error_code']=0
     data['msg']='注册成功！'
+    data['username'] = user_info['name']
     return data
 
 
 user_info={}
-user_info['user']='119'
-user_info['pwd']='123'
-user_info['name']='123'
-user_info['email']='123'
+user_info['user']='13411989234'
+user_info['pwd']='123456'
+user_info['name']='nicole'
+user_info['email']='14nicole'
 print(check_register(user_info))
 
