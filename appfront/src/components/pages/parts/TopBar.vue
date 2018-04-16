@@ -11,11 +11,15 @@
       text-color="#fff">
       <el-menu-item class="el-menu-item" index="/">美妆商品导购系统</el-menu-item>
       <el-menu-item class="el-menu-item" index="focus">我的降价通知商品</el-menu-item>
-      <el-button class="menu-btn" type="text" id="logout" @click="dialogRegisterVisible=true">{{btn_register}}
+      <el-button class="menu-btn" type="text" id="register" @click="dialogRegisterVisible=true">{{ btnRegister }}
       </el-button>
-      <el-button class="menu-btn" type="text" id="name-login" @click="dialogLoginVisible=true">{{btn_login}}
+      <el-button class="menu-btn" type="text" id="login" @click="dialogLoginVisible=true">{{ btnLogin }}
       </el-button>
 
+      <el-button class="menu-btn" type="text" id="logout" @click="dialogLoginVisible=true">{{ btnLogout }}
+      </el-button>
+      <el-button class="menu-btn" type="text" id="name" @click="dialogLoginVisible=true">{{ btnName }}
+      </el-button>
     </el-menu>
 
     <!--登录 对话框-->
@@ -63,7 +67,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleRegisterCansel">取 消</el-button>
-        <el-button type="primary" @click="handleRegisterSubmit(loginForm)">确 定</el-button>
+        <el-button type="primary" @click="handleRegisterSubmit">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -81,10 +85,12 @@
       return {
         dialogLoginVisible: false,
         dialogRegisterVisible: false,
-        msg: 'Welcome to Your Vue.js App',
-        btn_register: '注册',
-        btn_login: '登录',
+        btnRegister: '注册',
+        btnLogin: '登录',
+        btnName: '',
+        btnLogout: '',
         activeIndex: '',
+        isLogin : false,
         loginForm: {
           username: '',
           password: '',
@@ -108,7 +114,7 @@
           email: [
             {required: true, message: '请输入邮箱', trigger: 'blur'},
             {
-              pattern: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$ /,
+              pattern: /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/,
               message: '请输入正确的邮箱地址',
               trigger: 'blur'
             }
@@ -138,40 +144,77 @@
         this.$refs['loginForm'].resetFields();  // 清空
       },
       handleLoginSubmit(){  //登录
+        let _this = this;
+        // 处理
+        this.$refs['loginForm'].validate((valid) => {
+          if (valid) {
+            console.log('submit!!');
+            console.log(this.loginForm.username);
+            console.log(this.loginForm.password);
 
+            let url = 'http://127.0.0.1:8000/beauty/user/login'
+            let params = new URLSearchParams();
+            params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
+            params.append('password', this.loginForm.password);
+
+            this.$http({
+              method: 'post',
+              url: url,
+              data: params
+            })
+              .then(function (response) {
+                _this.btnLogin = response.data.username;
+                _this.isLogin = true;
+                _this.$message.success(response.data.msg);
+              })
+              .catch(function (error) {
+                _this.$message.error(response.data.msg);
+              });
+
+            this.dialogLoginVisible = false;
+            this.$refs['loginForm'].resetFields();  // 清空
+          } else {
+            _this.$message.error('登录不成功！');
+            return false;
+          }
+        });
+      },
+      handleRegisterSubmit(){  // 注册
+        let _this = this;
         // 处理
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
             console.log('submit!!');
 
-            this.$http.post('http://127.0.0.1:8000/beauty/user/login', {
-              username: this.loginForm.username,
-              password: this.loginForm.password,
+            let url = 'http://127.0.0.1:8000/beauty/user/register'
+            let params = new URLSearchParams();
+            params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
+            params.append('password', this.loginForm.password);
+            params.append('name', this.loginForm.name);
+            params.append('email', this.loginForm.email);
+
+            this.$http({
+              method: 'post',
+              url: url,
+              data: params
             })
               .then(function (response) {
-                console.log(response);
+                _this.btnLogin = response.data.username;
+                _this.isLogin = true;
+                _this.$message.success(response.data.msg);
               })
               .catch(function (error) {
-                console.log(error);
+                _this.$message.error(response.data.msg);
               });
-
 
             this.dialogLoginVisible = false;
             this.$refs['loginForm'].resetFields();  // 清空
           } else {
-            console.log('error submit!!');
+            _this.$message.error('注册不成功！');
             return false;
           }
         });
 
-
-//        this.$refs['loginForm'].resetFields();  // 清空
-
-      },
-      handleRegisterSubmit(form){  // 注册
-        // 处理
-        this.dialogLoginVisible = false;
-        this.$refs['loginForm'].resetFields();  // 清空
       }
     },
 
@@ -191,7 +234,7 @@
       margin: 0 20px 0 5px;
     }
 
-    #name-login, #logout {
+    #login, #register, #name, #logout {
       float: right;
     }
   }
