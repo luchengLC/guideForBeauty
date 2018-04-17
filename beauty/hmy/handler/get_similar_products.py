@@ -248,7 +248,7 @@ def getAllSimilarProducts(category,search_str):
 #     return dict_data
 
 
-
+#request方法
 def handle_search(request):
     if request.method=='GET':
         pname=request.GET.get('pame','')
