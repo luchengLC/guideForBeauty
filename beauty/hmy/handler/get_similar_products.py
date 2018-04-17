@@ -248,11 +248,12 @@ def getAllSimilarProducts(category,search_str):
 #     return dict_data
 
 
-@require_http_methods(["GET"])
+
 def handle_search(request):
-    pname= '卡姿兰'
-    category='眼线'
-    res = getAllSimilarProducts(category, parse.unquote(str(pname)))
+    if request.method=='GET':
+        pname=request.GET.get('pame','')
+        category=request.GET.get('category','')
+        res = getAllSimilarProducts(category, parse.unquote(str(pname)))
     return JsonResponse(res, safe=False)
 
 
