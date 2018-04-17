@@ -50,6 +50,6 @@ urlpatterns = [
 
     # lc 主页验证登录
     url(r'user/home',home.handle_check_login),
-    url(r'user/logout',home.handle_logout),
+    url(r'user/logout',logout.handle_logout),
 
 ]
