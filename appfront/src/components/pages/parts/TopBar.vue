@@ -11,11 +11,15 @@
       text-color="#fff">
       <el-menu-item class="el-menu-item" index="/">美妆商品导购系统</el-menu-item>
       <el-menu-item class="el-menu-item" index="focus">我的降价通知商品</el-menu-item>
-      <el-button class="menu-btn" type="text" id="logout" @click="dialogRegisterVisible=true">{{register}}
+      <el-button class="menu-btn" type="text" id="register" @click="dialogRegisterVisible=true">{{ btnRegister }}
       </el-button>
-      <el-button class="menu-btn" type="text" id="name-login" @click="dialogLoginVisible=true">{{login_out}}
+      <el-button class="menu-btn" type="text" id="login" @click="dialogLoginVisible=true">{{ btnLogin }}
       </el-button>
 
+      <el-button class="menu-btn" type="text" id="logout" @click="dialogLoginVisible=true">{{ btnLogout }}
+      </el-button>
+      <el-button class="menu-btn" type="text" id="name" @click="dialogLoginVisible=true">{{ btnName }}
+      </el-button>
     </el-menu>
 
     <!--登录 对话框-->
@@ -23,19 +27,19 @@
       title="登录"
       :visible.sync="dialogLoginVisible"
       width="500px"
-      :before-close="handleLoginClose">
-      <div class="el-dialog-div">
-        账号：
-        <el-input v-model="input_username" placeholder="手机号码..." style="width: 300px"></el-input>
-      </div>
-      <div class="el-dialog-div">
-        密码：
-        <el-input v-model="input_pw" placeholder="密码..." style="width: 300px"></el-input>
-      </div>
+      :before-close="handleLoginCansel">
+      <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="90px">
+        <el-form-item label="账号" prop="username">
+          <el-input v-model="loginForm.username" placeholder="手机号码..."></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="loginForm.password" placeholder="密码..."></el-input>
+        </el-form-item>
+      </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogLoginVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogLoginVisible = false">确 定</el-button>
+        <el-button @click="handleLoginCansel">取 消</el-button>
+        <el-button type="primary" @click="handleLoginSubmit">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -44,27 +48,26 @@
       title="注册"
       :visible.sync="dialogRegisterVisible"
       width="500px"
-      :before-close="handleRegisterClose">
-      <div class="el-dialog-div">
-        账 号：
-        <el-input v-model="input_username" placeholder="手机号码..." style="width: 300px"></el-input>
-      </div>
-      <div class="el-dialog-div">
-        昵 称：
-        <el-input v-model="input_name" placeholder="昵称..." style="width: 300px"></el-input>
-      </div>
-      <div class="el-dialog-div">
-        密 码：
-        <el-input v-model="input_pw" placeholder="密码..." style="width: 300px"></el-input>
-      </div>
-      <div class="el-dialog-div">
-        邮 箱：
-        <el-input v-model="input_email" placeholder="邮箱..." style="width: 300px"></el-input>
-      </div>
+      :before-close="handleRegisterCansel">
+      <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="90px">
+        <el-form-item label="账号" prop="username">
+          <el-input v-model="loginForm.username" placeholder="手机号码..."></el-input>
+        </el-form-item>
+        <el-form-item label="昵称" prop="name">
+          <el-input v-model="loginForm.name" placeholder="昵称..."></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="loginForm.password" placeholder="密码..."></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="loginForm.email" placeholder="邮箱..."></el-input>
+        </el-form-item>
+
+      </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogRegisterVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogRegisterVisible = false">确 定</el-button>
+        <el-button @click="handleRegisterCansel">取 消</el-button>
+        <el-button type="primary" @click="handleRegisterSubmit">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -80,36 +83,138 @@
     props: ["actives"],
     data () {
       return {
-        input_username: '',
-        input_name: '',
-        input_pw: '',
-        input_email: '',
         dialogLoginVisible: false,
         dialogRegisterVisible: false,
-        msg: 'Welcome to Your Vue.js App',
-        register: '注册',
-        login_out: '登录',
+        btnRegister: '注册',
+        btnLogin: '登录',
+        btnName: '',
+        btnLogout: '',
         activeIndex: '',
+        isLogin : false,
+        loginForm: {
+          username: '',
+          password: '',
+          name: '',
+          email: '',
+        },
+        registerForm: {},
+        rules: {
+          username: [
+            {required: true, message: '请输入账号（手机号码）', trigger: 'blur'},
+            {pattern: /^0?(13[0-9]|[15[7-9]|153|156|18[7-9])[0-9]{8}$/, message: '请正确地输入账号（手机号码）', trigger: 'blur'}
+          ],
+          password: [
+            {required: true, message: '请输入密码', trigger: 'blur'},
+            {min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur'},
+            {pattern: /^(\w){6,20}$/, message: '只能输入6-20个字母、数字、下划线', trigger: 'blur'}
+          ],
+          name: [
+            {required: true, message: '请输入昵称', trigger: 'blur'},
+          ],
+          email: [
+            {required: true, message: '请输入邮箱', trigger: 'blur'},
+            {
+              pattern: /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/,
+              message: '请输入正确的邮箱地址',
+              trigger: 'blur'
+            }
+          ]
+        },
       }
     },
-    mounted: function() {
+    mounted: function () {
       this.$nextTick(function () {
         this.activeIndex = this.actives;
         console.log(this.activeIndex);
       })
     },
     methods: {
-      handleLoginClose(done) {
-        this.dialogLoginVisible = false
+      handleLoginCansel(done) {  //登录
+        this.dialogLoginVisible = false;
+        this.$refs['loginForm'].resetFields();  // 清空
 //        this.$confirm('确认关闭？')
 //          .then(_ => {
 //            done();
 //          })
 //          .catch(_ => {});
       },
+      handleRegisterCansel(done) {  // 注册
+        //
+        this.dialogRegisterVisible = false;
+        this.$refs['loginForm'].resetFields();  // 清空
+      },
+      handleLoginSubmit(){  //登录
+        let _this = this;
+        // 处理
+        this.$refs['loginForm'].validate((valid) => {
+          if (valid) {
+            console.log('submit!!');
+            console.log(this.loginForm.username);
+            console.log(this.loginForm.password);
 
-      handleRegisterClose(done) {
-        this.dialogRegisterVisible = false
+            let url = 'http://127.0.0.1:8000/beauty/user/login'
+            let params = new URLSearchParams();
+            params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
+            params.append('password', this.loginForm.password);
+
+            this.$http({
+              method: 'post',
+              url: url,
+              data: params
+            })
+              .then(function (response) {
+                _this.btnLogin = response.data.username;
+                _this.isLogin = true;
+                _this.$message.success(response.data.msg);
+              })
+              .catch(function (error) {
+                _this.$message.error(response.data.msg);
+              });
+
+            this.dialogLoginVisible = false;
+            this.$refs['loginForm'].resetFields();  // 清空
+          } else {
+            _this.$message.error('登录不成功！');
+            return false;
+          }
+        });
+      },
+      handleRegisterSubmit(){  // 注册
+        let _this = this;
+        // 处理
+        this.$refs['loginForm'].validate((valid) => {
+          if (valid) {
+            console.log('submit!!');
+
+            let url = 'http://127.0.0.1:8000/beauty/user/register'
+            let params = new URLSearchParams();
+            params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
+            params.append('password', this.loginForm.password);
+            params.append('name', this.loginForm.name);
+            params.append('email', this.loginForm.email);
+
+            this.$http({
+              method: 'post',
+              url: url,
+              data: params
+            })
+              .then(function (response) {
+                _this.btnLogin = response.data.username;
+                _this.isLogin = true;
+                _this.$message.success(response.data.msg);
+              })
+              .catch(function (error) {
+                _this.$message.error(response.data.msg);
+              });
+
+            this.dialogLoginVisible = false;
+            this.$refs['loginForm'].resetFields();  // 清空
+          } else {
+            _this.$message.error('注册不成功！');
+            return false;
+          }
+        });
+
       }
     },
 
@@ -129,7 +234,7 @@
       margin: 0 20px 0 5px;
     }
 
-    #name-login, #logout {
+    #login, #register, #name, #logout {
       float: right;
     }
   }

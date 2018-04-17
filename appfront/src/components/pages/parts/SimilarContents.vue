@@ -21,11 +21,11 @@
           <p class="text" :title="item.description">{{item.description}}</p>
           <div class="btn-div">
             <p class="price">{{item.price}}</p>
-            <el-button class="price-btn" type="text">相似商品 待改</el-button>
+            <el-button class="price-btn" type="text">评论数：{{item.comment_count}}</el-button>
           </div>
           <div class="btn-div">
-            <p class="store">{{item.store}}</p> --
-            <p class="platform">{{item.platform}}</p>
+            <p class="store">{{item.store}}</p>
+            <p class="platform">平台：{{item.platform}}</p>
           </div>
         </div>
       </div>
@@ -51,16 +51,68 @@
     data () {
       return {
         showWords: '相似商品',
-        similarGoods: []
+        item: {},
+        similarGoods: [],
+        fullscreenLoading: false,
       }
     },
-    mounted: function () {
-      //这个是钩子函数
-      this.$nextTick(function () {
-        console.log('sussess')
-        console.log(this.$route.params.item)
-        this.similarGoods.push(this.$route.params.item)
-      })
+    methods: {
+      init(){
+        this.similarGoods = [];
+        console.log('到达init');
+//        this.similarGoods.push(this.item);
+//        console.log('this.similarGoods=')
+//        console.log(this.similarGoods);
+        this.handleGetSimilarGoods();
+      },
+      handleGetSimilarGoods() {
+        console.log('到达handleGetSimilarGoods');
+        if (this.item === null) {
+          this.$message.error('操作失误，请重新操作！')
+        } else {
+          this.fullscreenLoading = true;
+          let category = this.item.category;
+          let pname = this.item.name;
+          console.log('原始的pname = ' + pname);
+          pname = encodeURIComponent(pname);
+          console.log('encode的pname = ' + pname);
+
+          let pnamem = pname.decodeURIComponent(pname);
+          console.log('decode的pnamem = ' + pnamem);
+
+          // url编码
+          let url = 'http://127.0.0.1:8000/beauty//productsList/getAllSimilarProducts?category='+category+'&pname=' + pname;
+          url = url.urlencoded(); // 确认一下编码
+
+          this.$http.get(url)
+            .then((response) => {
+              this.res = response.data
+              if (this.res.error_code === 0) {
+                // 成功
+                let ress = this.res['data']['item_list'];
+                // 换大图
+                for (let i in ress) {
+                  ress[i]['img1_address'] = ress[i]['img1_address'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
+                }
+                this.similarGoods = this.res['data']['item_list'];
+
+              } else {  // 失败
+                this.$message.error('没有查找到对应的相似商品，请重试！')
+                console.log(this.res['msg']);
+              }
+              this.fullscreenLoading = false;
+            });
+        }
+      }
+    },
+
+    watch: {
+      '$route'(to, from){
+        this.item = this.$route.params.item;
+        console.log(this.item);
+        console.log('传参 sussess');
+        this.init();
+      }
     }
   }
 </script>

@@ -45,8 +45,7 @@
             <div class="price-p">￥<span class="price">{{item.price}}</span></div>
             <div class="btn-div">
               <el-button @click="getCutPrice(item, username)" class="price-btn" type="text">降价通知</el-button>
-              <!--<el-button @click="dialogVisible=true" class="price-btn" type="text">降价通知</el-button>-->
-              <el-button @click="getSimilar(item)" class="similar-btn" type="text">找相似物</el-button>
+              <el-button @click="getSimilar(index, item)" class="similar-btn" type="text">找相似物</el-button>
             </div>
           </div>
           <!--<div class="btn-div">-->
@@ -135,6 +134,7 @@
               }
               this.fullscreenLoading = false;
             });
+//          console.log(decodeURIComponent('%E5%AE%9D%E6%A0%BC%E4%B8%BD%EF%BC%88BVLGARI%EF%BC%89%E7%A2%A7%E8%93%9D%E7%94%B7%E6%80%A7%E6%B7%A1%E9%A6%99%E6%B0%B4%2050ml%EF%BC%88%E6%B0%B4%E8%83%BD%E9%87%8F%20%E9%A6%99%E6%B0%B4%E7%94%B7%E5%A3%AB%EF%BC%89'));
 
         }
       },
@@ -154,9 +154,18 @@
         console.log(item);
         console.log(username);
       },
-      getSimilar(item) {   // 相似商品
-        this.$router.push({name: 'similar', params: {item: item}})
+      getSimilar(index, item) {   // 相似商品
+        console.log('index='+index);
+        console.log(item);
+        const hre = this.$router.push({name: 'similar', params: {item: item}});
+        // 想办法把相似商品在新的页面打开
+//        const hre = this.$router.resolve({
+//          name: 'similar',
+//          params: {item: item}
+//        })
+//        window.open('_blank', hre)
       },
+
       handleClose(done) {
         this.$message.success('成功！');
         this.dialogVisible = false;

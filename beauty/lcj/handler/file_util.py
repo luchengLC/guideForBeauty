@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 import os
-file_path = (os.path.dirname(os.path.dirname(os.path.abspath("file_util.py"))) + '/data/').replace('\\', '/')
+file_path = (os.path.dirname(os.path.abspath("file_util.py")) + '/beauty/lcj/data/').replace('\\','/')
 
 def del_duplicate(relative_path):
     url_list = []

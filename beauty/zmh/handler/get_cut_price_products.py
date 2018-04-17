@@ -1,4 +1,4 @@
-#!/usr/bin/python 
+#!/usr/bin/python
 # -*- coding:utf-8 -*-
 #-*-coding=utf-8-*-
 from django.http import JsonResponse
@@ -91,5 +91,4 @@ if __name__ == '__main__':
     # http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=卡姿兰蜗牛气垫调控霜&PageNo=1
     # keyword = '卡姿兰蜗牛气垫调控霜'
     j = handle_search("e")
-
     print(j.content)
