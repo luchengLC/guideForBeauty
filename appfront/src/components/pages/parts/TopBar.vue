@@ -11,14 +11,14 @@
       text-color="#fff">
       <el-menu-item class="el-menu-item" index="/">美妆商品导购系统</el-menu-item>
       <el-menu-item class="el-menu-item" index="focus">我的降价通知商品</el-menu-item>
-      <el-button class="menu-btn" type="text" id="register" @click="dialogRegisterVisible=true">{{ btnRegister }}
+      <el-button class="menu-btn" type="text" id="register" @click="dialogRegisterVisible=true" v-if="isLogout">{{ btnRegister }}
       </el-button>
-      <el-button class="menu-btn" type="text" id="login" @click="dialogLoginVisible=true">{{ btnLogin }}
+      <el-button class="menu-btn" type="text" id="login" @click="dialogLoginVisible=true" v-if="isLogout">{{ btnLogin }}
       </el-button>
 
-      <el-button class="menu-btn" type="text" id="logout" @click="dialogLoginVisible=true">{{ btnLogout }}
+      <el-button class="menu-btn" type="text" id="logout" @click="dialogLoginVisible=true"v-if="isLogin">{{ btnLogout }}
       </el-button>
-      <el-button class="menu-btn" type="text" id="name" @click="dialogLoginVisible=true">{{ btnName }}
+      <el-button class="menu-btn" type="text" id="name" @click="dialogLoginVisible=true" v-if="isLogin">{{ btnName }}
       </el-button>
     </el-menu>
 
@@ -88,9 +88,10 @@
         btnRegister: '注册',
         btnLogin: '登录',
         btnName: '',
-        btnLogout: '',
+        btnLogout: '注销',
         activeIndex: '',
         isLogin : false,
+        isLogout : true,
         loginForm: {
           username: '',
           password: '',
@@ -125,7 +126,8 @@
     mounted: function () {
       this.$nextTick(function () {
         this.activeIndex = this.actives;
-        console.log(this.activeIndex);
+        // 设置 验证session
+        this.checkLogin();
       })
     },
     methods: {
@@ -161,8 +163,7 @@
               method: 'post',
               url: url,
               data: params
-            })
-              .then(function (response) {
+            }).then(function (response) {
                 _this.btnLogin = response.data.username;
                 _this.isLogin = true;
                 _this.$message.success(response.data.msg);
@@ -170,7 +171,6 @@
               .catch(function (error) {
                 _this.$message.error(response.data.msg);
               });
-
             this.dialogLoginVisible = false;
             this.$refs['loginForm'].resetFields();  // 清空
           } else {
@@ -214,7 +214,20 @@
             return false;
           }
         });
-
+      },
+      checkLogin() {
+        let _this = this;
+        this.$http.get('http://127.0.0.1:8000/beauty/user/home')
+          .then((response) => {
+            let res = response.data
+            if (res.error_num === 0) {
+              _this.btnName = res.username;
+              _this.isLogin = true;
+              _this.isLogout = false;
+            } else {
+              this.$message.error(res['msg'])
+            }
+          })
       }
     },
 

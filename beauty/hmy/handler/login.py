@@ -8,7 +8,7 @@ def handle_login(request):
         user=request.POST.get("username",'')
         pwd=request.POST.get("password",'')
         print(user)
-        print(pwd)
+        print()
         # user='119'
         # pwd='12'
         data=check_login(user,pwd)
