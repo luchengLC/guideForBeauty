@@ -100,7 +100,7 @@ def getAllSimilarProducts(category,search_str):
     final_str=" ".join(seg_list)
     print(final_str)
     #将字符串hash
-    str1=hm_str(final_str)
+    #str1=hm_str(final_str)
     #确定在哪个数据表进行数据的查询
     table_name = dicts[category]
     #取出特定数据库表按照评论总数排序的前1000条数据
@@ -120,16 +120,105 @@ def getAllSimilarProducts(category,search_str):
     conn.close()
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
-    ########方法一simhash
-    index = {}
-    for i in range(count):
-        index[i]=hammingDis(str1,hm_str(res[i][0]))
-    index = sorted(index.items(), key=lambda x: x[1], reverse=False)
+    # ########方法一simhash
+    # index = {}
+    # for i in range(count):
+    #     index[i]=hammingDis(str1,hm_str(res[i][0]))
+    # index = sorted(index.items(), key=lambda x: x[1], reverse=False)
+    # print(index)
+    # dict_data = {}
+    # datas=[]
+    # for i in range(top_n):
+    #     if index[i][1]>30:
+    #         break
+    #     sample = {}
+    #     try:
+    #         sample['name'] = res[index[i][0]][0]
+    #         sample['price'] = float(str(res[index[i][0]][2]))
+    #         sample['img1_address']=res[index[i][0]][3]
+    #         sample['address'] = res[index[i][0]][4]
+    #         if float(res[index[i][0]][5])==0.0:
+    #             sample['good_comment_percentage']=0
+    #         else:
+    #             sample['good_comment_percentage']=str(int(float(res[index[i][0]][5])*100))+'%'
+    #         sample['comment_count']=int(res[index[i][0]][6])
+    #         sample['platform']=res[index[i][0]][7]
+    #         sample['description']=res[index[i][0]][8]
+    #         datas.append(sample)
+    #     except:
+    #         pass
+    # dict_data['data'] = datas
+    # if len(dict_data['data'])==0:
+    #     dict_data['error_code'] = 1
+    #     dict_data['msg'] = '抱歉,搜索不到相似商品！'
+    #     return dict_data
+    # dict_data['error_code'] = 0
+    # dict_data['msg'] = 'success'
+    # print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    # print(len(dict_data['data']))
+    # return dict_data
+
+#######方法2--余弦值
+#  #将商品名称文本放入list
+    corpus = [res[i][0] for i in range(0,len(res))]
+    #将当前点击的商品名称插入商品名称list
+    corpus.insert(0,final_str)
+    print(len(corpus))
+    vectorizer = CountVectorizer()  # 该类会将文本中的词语转换为词频矩阵，矩阵元素a[i][j] 表示j词在i类文本下的词频
+    transformer = TfidfTransformer()  # 该类会统计每个词语的tf-idf权值
+
+    tfidf = transformer.fit_transform(
+        vectorizer.fit_transform(corpus))  # 第一个fit_transform是计算tf-idf，第二个fit_transform是将文本转为词频矩阵
+    juzhen=vectorizer.fit_transform(corpus).toarray()
+    print(len(juzhen))
+    #print(juzhen[0])
+    word = vectorizer.get_feature_names()  # 获取词袋模型中的所有词语
+    # print('词袋模型')
+    # print(word)
+#
+#     #文本相似度比较
+#     #简单比较文本的相似度
+#     #     ##计算余弦值,第一个文本和第二个文本的相似度
+#     #     #如果设置对角线的值都为1，不利于取最大值
+    print(len(res))
+    cos_list = [0 for i in range(len(res))]
+    for w in range(1,len(res)+1):
+        fenmu = 0
+        fenzi_1 = 0
+        fenzi_2 = 0
+        for i in range(len(word)):
+            fenmu=fenmu+juzhen[0][i]*juzhen[w][i]
+            fenzi_1=fenzi_1+juzhen[0][i]*juzhen[0][i]
+            fenzi_2=fenzi_2+juzhen[w][i]*juzhen[w][i]
+        #print(fenzi_1,fenzi_2)
+        if math.sqrt(fenzi_1)==0.0 or math.sqrt(fenzi_2)==0:
+            cos=0
+        else:
+            cos=fenmu/(math.sqrt(fenzi_1)*math.sqrt(fenzi_2))
+        cos_list[w-1]=cos
+
+    #将文本相似度余弦值存入字典并排序
+    index={}
+    for i in range(len(res)):
+        index[i]=cos_list[i]
     print(index)
+    #排序
+    index=sorted(index.items(),key=lambda x:x[1],reverse=True)
+    print(index)
+    for i in range(top_n):
+        if index[i][1]==0.0:
+            break
+        #print(res[index[i][0]][0])
+    #print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+#取出相似度大的下标值index[i][0]
+
+#---------处理返回的数据
+    #name,number,price,img1_address,address,
+    # good_comment_percentage,comment_count,platform,description
     dict_data = {}
     datas=[]
     for i in range(top_n):
-        if index[i][1]>30:
+        if index[i][1]==0.0:
             break
         sample = {}
         try:
@@ -157,95 +246,6 @@ def getAllSimilarProducts(category,search_str):
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     print(len(dict_data['data']))
     return dict_data
-
-########方法2--余弦值
-# #  #将商品名称文本放入list
-#     corpus = [res[i][0] for i in range(0,len(res))]
-#     #将当前点击的商品名称插入商品名称list
-#     corpus.insert(0,final_str)
-#     print(len(corpus))
-#     vectorizer = CountVectorizer()  # 该类会将文本中的词语转换为词频矩阵，矩阵元素a[i][j] 表示j词在i类文本下的词频
-#     transformer = TfidfTransformer()  # 该类会统计每个词语的tf-idf权值
-#
-#     tfidf = transformer.fit_transform(
-#         vectorizer.fit_transform(corpus))  # 第一个fit_transform是计算tf-idf，第二个fit_transform是将文本转为词频矩阵
-#     juzhen=vectorizer.fit_transform(corpus).toarray()
-#     print(len(juzhen))
-#     #print(juzhen[0])
-#     word = vectorizer.get_feature_names()  # 获取词袋模型中的所有词语
-#     # print('词袋模型')
-#     # print(word)
-# #
-# #     #文本相似度比较
-# #     #简单比较文本的相似度
-# #     #     ##计算余弦值,第一个文本和第二个文本的相似度
-# #     #     #如果设置对角线的值都为1，不利于取最大值
-#     print(len(res))
-#     cos_list = [0 for i in range(len(res))]
-#     for w in range(1,len(res)+1):
-#         fenmu = 0
-#         fenzi_1 = 0
-#         fenzi_2 = 0
-#         for i in range(len(word)):
-#             fenmu=fenmu+juzhen[0][i]*juzhen[w][i]
-#             fenzi_1=fenzi_1+juzhen[0][i]*juzhen[0][i]
-#             fenzi_2=fenzi_2+juzhen[w][i]*juzhen[w][i]
-#         #print(fenzi_1,fenzi_2)
-#         if math.sqrt(fenzi_1)==0.0 or math.sqrt(fenzi_2)==0:
-#             cos=0
-#         else:
-#             cos=fenmu/(math.sqrt(fenzi_1)*math.sqrt(fenzi_2))
-#         cos_list[w-1]=cos
-#
-#     #将文本相似度余弦值存入字典并排序
-#     index={}
-#     for i in range(len(res)):
-#         index[i]=cos_list[i]
-#     print(index)
-#     #排序
-#     index=sorted(index.items(),key=lambda x:x[1],reverse=True)
-#     print(index)
-#     for i in range(top_n):
-#         if index[i][1]==0.0:
-#             break
-#         #print(res[index[i][0]][0])
-#     #print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-# #取出相似度大的下标值index[i][0]
-#
-# #---------处理返回的数据
-#     #name,number,price,img1_address,address,
-#     # good_comment_percentage,comment_count,platform,description
-#     dict_data = {}
-#     datas=[]
-#     for i in range(top_n):
-#         if index[i][1]==0.0:
-#             break
-#         sample = {}
-#         try:
-#             sample['name'] = res[index[i][0]][0]
-#             sample['price'] = float(str(res[index[i][0]][2]))
-#             sample['img1_address']=res[index[i][0]][3]
-#             sample['address'] = res[index[i][0]][4]
-#             if float(res[index[i][0]][5])==0.0:
-#                 sample['good_comment_percentage']=0
-#             else:
-#                 sample['good_comment_percentage']=str(int(float(res[index[i][0]][5])*100))+'%'
-#             sample['comment_count']=int(res[index[i][0]][6])
-#             sample['platform']=res[index[i][0]][7]
-#             sample['description']=res[index[i][0]][8]
-#             datas.append(sample)
-#         except:
-#             pass
-#     dict_data['data'] = datas
-#     if len(dict_data['data'])==0:
-#         dict_data['error_code'] = 1
-#         dict_data['msg'] = '抱歉,搜索不到相似商品！'
-#         return dict_data
-#     dict_data['error_code'] = 0
-#     dict_data['msg'] = 'success'
-#     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-#     print(len(dict_data['data']))
-#     return dict_data
 
 
 #request方法
