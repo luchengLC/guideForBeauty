@@ -77,12 +77,11 @@
           pname = encodeURIComponent(pname);
           console.log('encode的pname = ' + pname);
 
-          let pnamem = pname.decodeURIComponent(pname);
+          let pnamem = decodeURIComponent(pname);
           console.log('decode的pnamem = ' + pnamem);
 
           // url编码
-          let url = 'http://127.0.0.1:8000/beauty//productsList/getAllSimilarProducts?category='+category+'&pname=' + pname;
-          url = url.urlencoded(); // 确认一下编码
+          let url = 'http://127.0.0.1:8000/beauty/productsList/getAllSimilarProducts?category='+category+'&pname=' + pname;
 
           this.$http.get(url)
             .then((response) => {

@@ -11,16 +11,37 @@
       text-color="#fff">
       <el-menu-item class="el-menu-item" index="/">美妆商品导购系统</el-menu-item>
       <el-menu-item class="el-menu-item" index="focus">我的降价通知商品</el-menu-item>
-      <el-button class="menu-btn" type="text" id="register" @click="dialogRegisterVisible=true">{{ btnRegister }}
+      <el-button class="menu-btn" type="text" id="register" @click="dialogRegisterVisible=true" v-if="isLogin">{{ btnRegister }}
       </el-button>
-      <el-button class="menu-btn" type="text" id="login" @click="dialogLoginVisible=true">{{ btnLogin }}
+      <el-button class="menu-btn" type="text" id="login" @click="dialogLoginVisible=true" v-if="isLogin">{{ btnLogin }}
       </el-button>
 
-      <el-button class="menu-btn" type="text" id="logout" @click="dialogLoginVisible=true">{{ btnLogout }}
+      <el-button class="menu-btn" type="text" id="logout" @click="dialogLogoutVisible=true" v-if="isLogout">{{ btnLogout }}
       </el-button>
-      <el-button class="menu-btn" type="text" id="name" @click="dialogLoginVisible=true">{{ btnName }}
+      <el-button class="menu-btn" type="text" id="name">{{ btnName }}
       </el-button>
     </el-menu>
+
+    <!--登录 对话框-->
+    <el-dialog
+      title="登录"
+      :visible.sync="dialogLoginVisible"
+      width="500px"
+      :before-close="handleLoginCansel">
+      <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="90px">
+        <el-form-item label="账号" prop="username">
+          <el-input v-model="loginForm.username" placeholder="手机号码..."></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="loginForm.password" placeholder="密码..."></el-input>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleLoginCansel">取 消</el-button>
+        <el-button type="primary" @click="handleLoginSubmit">确 定</el-button>
+      </span>
+    </el-dialog>
 
     <!--登录 对话框-->
     <el-dialog
@@ -88,9 +109,10 @@
         btnRegister: '注册',
         btnLogin: '登录',
         btnName: '',
-        btnLogout: '',
+        btnLogout: '注销',
         activeIndex: '',
         isLogin : false,
+        isLogout : true,
         loginForm: {
           username: '',
           password: '',
@@ -125,7 +147,10 @@
     mounted: function () {
       this.$nextTick(function () {
         this.activeIndex = this.actives;
-        console.log(this.activeIndex);
+        // 设置 验证session
+        this.checkLogin();
+        this.isLogin = false;
+        this.isLogout = true;
       })
     },
     methods: {
@@ -161,16 +186,15 @@
               method: 'post',
               url: url,
               data: params
-            })
-              .then(function (response) {
-                _this.btnLogin = response.data.username;
-                _this.isLogin = true;
+            }).then(function (response) {
+                _this.btnName = response.data.username;
+                _this.isLogout = true;
+                _this.isLogin = false;
                 _this.$message.success(response.data.msg);
               })
               .catch(function (error) {
                 _this.$message.error(response.data.msg);
               });
-
             this.dialogLoginVisible = false;
             this.$refs['loginForm'].resetFields();  // 清空
           } else {
@@ -214,7 +238,22 @@
             return false;
           }
         });
+      },
+      checkLogin() {
+        let _this = this;
+        this.$http.get('http://127.0.0.1:8000/beauty/user/home')
+          .then((response) => {
+            let res = response.data;
 
+            if (res.error_code === 0) {
+              console.log(res);
+              _this.btnName = res.username;
+              _this.isLogin = true;
+              _this.isLogout = false;
+            } else {
+              console.log(res['msg']);
+            }
+          })
       }
     },
 
