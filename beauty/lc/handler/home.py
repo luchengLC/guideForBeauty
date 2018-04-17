@@ -4,14 +4,19 @@ import hashlib
 from django.http import JsonResponse
 
 
-# @require_http_methods(["GET"])
 def handle_check_login(request):
+
     data = {}
-    if request.session.get(['username'], none):
-        request.session.flush()
+    if request.session.get('username',None):
+        username = request.session['username']
         data['error_code'] = 0
         data['msg'] = 'success'
+        data['username'] = username
     else:
-        data['error_code'] = 1
-        data['msg'] = '未登录！'
+        username = '游客'
+        data['error_code'] = 0
+        data['msg'] = 'success'
+        data['username'] = username
+    print('home用户名:', username)
+
     return JsonResponse(data, safe=False)
