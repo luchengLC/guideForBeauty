@@ -266,7 +266,7 @@ def handle_search(request):
 if __name__=='__main__':
     #str_emm='阿玛尼（ARMANI）%20阿玛尼ARMANI%20口红%20唇膏%20唇釉%20红管#501%20玫瑰豆沙色%20热卖'
 
-    str_emm='美宝莲好气色轻唇膏咬唇妆梦幻娃娃系列润唇膏口红唇彩 18# 樱桃红'
+    str_emm='美宝莲 宝蓓爱炫彩护唇膏 润唇膏1.9g 美宝莲口红 唇彩 滋润 纯爱橘子酱'
     #parse.unquote(str(str_emm))
     res=getAllSimilarProducts('唇部',str_emm)
     #print(res['data'][0]['img1_address'])
