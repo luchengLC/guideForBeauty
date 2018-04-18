@@ -79,11 +79,11 @@
           this.fullscreenLoading = true;
           let category = this.item.category;
           let pname = this.item.name;
+
           console.log('原始的pname = ' + pname);
           console.log('原始的category = ' + category);
           pname = encodeURIComponent(pname);
           console.log('encode的pname = ' + pname);
-
           let pnamem = decodeURIComponent(pname);
           console.log('decode的pnamem = ' + pnamem);
 

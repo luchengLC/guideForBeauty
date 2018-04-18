@@ -15,7 +15,10 @@ def handle_login(request):
         data = check_login(user, pwd)
         if data['error_code'] == 0:
             print('=================')
-            request.session['username'] = user
+            request.session['username'] = data['name']
+            request.session['name'] = data['name']
+            print('--------------')
+            print(request.session['username'])
             request.session.set_expiry(600)
     return JsonResponse(data, safe=False)
 

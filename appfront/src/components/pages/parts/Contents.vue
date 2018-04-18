@@ -93,7 +93,7 @@
 
     data () {
       return {
-        username: ' 13411984676',  // 从cookie中拿到的username，假数据
+        username: '13411984676',  // 从cookie中拿到的username，假数据
         currentPage: 1,   // 当前页
         dialogVisible: false,
         fullscreenLoading: false,
@@ -157,7 +157,7 @@
       getSimilar(index, item) {   // 相似商品
         console.log('index='+index);
         console.log(item);
-        const hre = this.$router.push({name: 'similar', params: {item: item}});
+        this.$router.push({name: 'similar', params: {item: item}});
         // 想办法把相似商品在新的页面打开
 //        const hre = this.$router.resolve({
 //          name: 'similar',

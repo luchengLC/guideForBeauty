@@ -4,13 +4,12 @@
       :default-active="activeIndex"
       class="el-menu"
       mode="horizontal"
-      router
       background-color="#545c64"
       active-text-color="#fff"
       active-backgroud-color="#545c64"
       text-color="#fff">
-      <el-menu-item class="el-menu-item" index="/">美妆商品导购系统</el-menu-item>
-      <el-menu-item class="el-menu-item" index="focus">我的降价通知商品</el-menu-item>
+      <el-menu-item class="el-menu-item" index="/" @click="getIndex()">美妆商品导购系统</el-menu-item>
+      <el-menu-item class="el-menu-item" index="focus" @click="getFocus(username)">我的降价通知商品</el-menu-item>
       <el-button class="menu-btn" type="text" id="register" @click="dialogRegisterVisible=true" v-if="isLogin">{{ btnRegister }}
       </el-button>
       <el-button class="menu-btn" type="text" id="login" @click="dialogLoginVisible=true" v-if="isLogin">{{ btnLogin }}
@@ -104,6 +103,7 @@
     props: ["actives"],
     data () {
       return {
+        username: '13411984676',  // 从cookie中拿到的username，假数据
         dialogLoginVisible: false,
         dialogRegisterVisible: false,
         btnRegister: '注册',
@@ -254,6 +254,12 @@
               console.log(res['msg']);
             }
           })
+      },
+      getFocus(username) {
+        this.$router.push({name: 'focus', params: {username: username}});
+      },
+      getIndex() {
+        this.$router.push({name: 'index'});
       }
     },
 
