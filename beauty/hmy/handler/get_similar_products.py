@@ -256,7 +256,7 @@ def getAllSimilarProducts(category,search_str):
 #request方法
 def handle_search(request):
     if request.method=='GET':
-        pname=request.GET.get('pame','')
+        pname=request.GET.get('pname','')
         category=request.GET.get('category','')
         res = getAllSimilarProducts(category, parse.unquote(str(pname)))
     return JsonResponse(res, safe=False)

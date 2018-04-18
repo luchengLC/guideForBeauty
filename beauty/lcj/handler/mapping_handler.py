@@ -100,7 +100,7 @@ def handle_sql_results(tables,keywords,page_no,order):
             temp["comment_count"] = int(all_list[i][5])
             temp["platform"] = all_list[i][6]
             temp["description"] = all_list[i][7]
-            temp['category '] = all_list[i][8]
+            temp["category"] = all_list[i][8]
             items.append(temp)
 
     data = {}
