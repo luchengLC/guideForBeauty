@@ -22,7 +22,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 dicts={'底妆':'product_baseMakeup','乳液面霜':'product_baseMakeup','套装':'product_baseMakeup','爽肤水':'product_baseMakeup',
        '眼线':'product_eye','眉笔':'product_eye','睫毛膏':'product_eye','眼影':'product_eye',
        '唇部':'product_lipstick',
-       '古龙水':'product_other_perfume','固体香水':'product_other_perfume',
+       '古龙水':'product_other_perfume','固体香水/香膏':'product_other_perfume','固体香水':'product_other_perfume',
        '香水':'product_perfume'}
 
 '''
@@ -102,13 +102,14 @@ def getAllSimilarProducts(category,search_str):
     #将字符串hash
     #str1=hm_str(final_str)
     #确定在哪个数据表进行数据的查询
+    print(category)
     table_name = dicts[category]
     #取出特定数据库表按照评论总数排序的前1000条数据
     #count--取数据库中前n条数据，top_n返回的列表最大数
     count=1000
     top_n=20
     #方法1
-    getProductName_sql = "select name,number,price,img1_address,address,good_comment_percentage,comment_count,platform,description from" + ' ' + table_name + ' ' + "order by comment_count desc limit "+str(count)
+    getProductName_sql = "select name,id,price,img1_address,address,good_comment_percentage,comment_count,platform,description from" + ' ' + table_name + ' ' + " where name is not null order by comment_count desc limit "+str(count)
     #链接数据库
     conn = pymysql.connect(host="39.108.185.66", port=3306, user='root', password='1234', db='beautyGirls_database',
                            charset='utf8mb4')
@@ -119,7 +120,6 @@ def getAllSimilarProducts(category,search_str):
     conn.commit()
     conn.close()
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-
     # ########方法一simhash
     # index = {}
     # for i in range(count):
@@ -160,7 +160,12 @@ def getAllSimilarProducts(category,search_str):
 
 #######方法2--余弦值
 #  #将商品名称文本放入list
-    corpus = [res[i][0] for i in range(0,len(res))]
+    corpus=[]
+    for i in range(0,len(res)):
+        if res[i][0] is None:
+            print('---',res[i][0],res[i][1])
+        seg=jieba.cut(res[i][0])
+        corpus.append((' '.join(seg)))
     #将当前点击的商品名称插入商品名称list
     corpus.insert(0,final_str)
     print(len(corpus))
@@ -260,8 +265,10 @@ def handle_search(request):
 #如何根据键入的关键词确定在哪个表查找
 if __name__=='__main__':
     #str_emm='阿玛尼（ARMANI）%20阿玛尼ARMANI%20口红%20唇膏%20唇釉%20红管#501%20玫瑰豆沙色%20热卖'
-    str_emm='宝格丽（BVLGARI）碧蓝男性淡香水 50ml（水能量 香水男士）'
-    res=getAllSimilarProducts('香水',parse.unquote(str(str_emm)))
+
+    str_emm='美宝莲好气色轻唇膏咬唇妆梦幻娃娃系列润唇膏口红唇彩 18# 樱桃红'
+    #parse.unquote(str(str_emm))
+    res=getAllSimilarProducts('唇部',str_emm)
     #print(res['data'][0]['img1_address'])
     #print(res['error_code'])
     #print(res['msg'])
@@ -271,4 +278,4 @@ if __name__=='__main__':
         print(res['msg'])
         pass
     for i in range(len(res['data'])):
-        print(res['data'][i]['name'],res['data'][i]['address'])
+        print(res['data'][i]['platform'],res['data'][i]['name'],res['data'][i]['address'])
