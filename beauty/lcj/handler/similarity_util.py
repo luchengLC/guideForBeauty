@@ -4,37 +4,35 @@ import os
 import jieba
 import jieba.analyse
 import re
-from gensim.models import word2vec
+from gensim.models import Word2Vec,word2vec
 from gensim import corpora, models, similarities
 from beauty.lcj.handler import database_handler
 from beauty.lcj.handler import file_util
 
-file_path = (os.path.dirname(os.path.dirname(os.path.abspath("similarity_util.py"))) + '/data/').replace('\\', '/')
+file_path = (os.path.dirname(os.path.abspath("similarity_util.py")) + '/beauty/lcj/data/').replace('\\', '/')
 
 #根据topK words 找出跟这些词最接近的词汇
 def get_similar_type(keywords):
-    tables = ['眼','唇','香水','底妆']
-    sentences=word2vec.Text8Corpus(file_path+"train_files/descriptions.txt") # 训练语料库
-    model=word2vec.Word2Vec(sentences, size=100)
-    print(keywords)
+    tables = ['眼','唇','口','香水','底妆']
+    # sentences = word2vec.Text8Corpus(file_path+"train_files/descriptions.txt")
+    # model = Word2Vec(sentences, size=1000)
+    # model.save(file_path+"train_files/trained.model")
+    model = Word2Vec.load(file_path+"train_files/trained.model")
     max = 0
     type = ''
-    for i in tables:
-        words = []
-        words.append(keywords)
-        for j in model.most_similar(keywords):
-            words.append(j[0])
-        similarity = model.similarity(i,keywords)
-        if similarity>max:
-            type = i
-            max = similarity
-        print(words)
+    try:
+        for i in tables:
+            similarity = model.similarity(i,keywords)
+            if similarity>max:
+                type = i
+                max = similarity
+        print(type,max)
+    except Exception as err:
+        return ['product_lipstick','product_eye','product_perfume', 'product_baseMakeup','product_other_perfume']
 
-    print(type,max)
-
-    if type=='眼妆':
+    if type=='眼':
         return ['product_eye']
-    elif type=='唇妆':
+    elif type=='唇' or  type=='口':
         return ['product_lipstick']
     elif type=='香水':
         return ['product_perfume', 'product_other_perfume']
@@ -64,7 +62,7 @@ def get_descriptions():
     try:
         for i in tables:
             sql = 'select description from ' + i
-            result = list(database_handler.execute_sql(sql, None))
+            result = list(database_handler.search_sql(sql, None))
             for desciprtin in result:
                 if len(desciprtin[0])==0:
                     continue
@@ -100,7 +98,7 @@ def get_brands():
     try:
         for i in tables:
             sql = 'select brand from ' + i
-            result = list(database_handler.execute_sql(sql, None))
+            result = list(database_handler.search_sql(sql, None))
             for j in result:
                 if len(j[0]) == 0:
                     continue
@@ -140,7 +138,5 @@ if __name__ == '__main__':
     file_util.del_duplicate('train_files/dictionary.txt')
     get_descriptions()
     get_similar_type(file_path, keyword)
-
-
 
 

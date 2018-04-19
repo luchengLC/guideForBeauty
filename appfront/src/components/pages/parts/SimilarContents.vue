@@ -12,7 +12,7 @@
     <!--item 表-->
     <div class="hot-search">
       <h2>{{showWords}}</h2>
-      <div class="goods-container">
+      <div class="goods-container" v-loading.fullscreen.lock="fullscreenLoading">
         <div class="goods-item" v-for="(item,index) in similarGoods" :key="index">
           <a :href="item.address" :title="item.name" target="_blank">
             <img :src="item.img1_address" alt="item.name">
@@ -51,16 +51,79 @@
     data () {
       return {
         showWords: '相似商品',
-        similarGoods: []
+        item: {},
+        similarGoods: [],
+        fullscreenLoading: false,
+      }
+    },
+    methods: {
+      init(){
+        this.item = this.$route.params.item;
+        console.log(this.item);
+        console.log('传参 sussess');
+        console.log(this.item['category']);
+        console.log(this.item['name']);
+
+        this.similarGoods = [];
+        console.log('到达init');
+//        this.similarGoods.push(this.item);
+//        console.log('this.similarGoods=')
+//        console.log(this.similarGoods);
+        this.handleGetSimilarGoods();
+      },
+      handleGetSimilarGoods() {
+        console.log('到达handleGetSimilarGoods');
+        if (this.item === null) {
+          this.$message.error('操作失误，请重新操作！')
+        } else {
+          this.fullscreenLoading = true;
+          let category = this.item.category;
+          let pname = this.item.name;
+
+          console.log('原始的pname = ' + pname);
+          console.log('原始的category = ' + category);
+          pname = encodeURIComponent(pname);
+          console.log('encode的pname = ' + pname);
+          let pnamem = decodeURIComponent(pname);
+          console.log('decode的pnamem = ' + pnamem);
+
+          // url编码
+          let url = 'http://127.0.0.1:8000/beauty/productsList/getAllSimilarProducts?category=' + category + '&pname=' + pname;
+
+          this.$http.get(url)
+            .then((response) => {
+              this.res = response.data;
+              console.log('========================')
+              console.log(this.res);
+              if (this.res.error_code === 0) {
+                // 成功
+                let ress = this.res['data'];
+                // 换大图
+                for (let i in ress) {
+                  ress[i]['img1_address'] = ress[i]['img1_address'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
+                }
+                this.similarGoods = this.res['data'];
+
+              } else {  // 失败
+                this.$message.error('没有查找到对应的相似商品，请重试！')
+                console.log(this.res['msg']);
+              }
+              this.fullscreenLoading = false;
+            });
+        }
       }
     },
     mounted: function () {
-      //这个是钩子函数
       this.$nextTick(function () {
-        console.log('sussess')
-        console.log(this.$route.params.item)
-        this.similarGoods.push(this.$route.params.item)
+
+        this.init();
       })
+    },
+
+    watch: {
+      '$route'(to, from){
+        this.init();
+      }
     }
   }
 </script>
