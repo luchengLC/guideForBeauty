@@ -54,10 +54,10 @@ def check_register(user_info):
     return data
 
 
-user_info={}
-user_info['user']='13411989234'
-user_info['pwd']='123456'
-user_info['name']='nicole'
-user_info['email']='14nicole'
-print(check_register(user_info))
+# user_info={}
+# user_info['user']='13411989234'
+# user_info['pwd']='123456'
+# user_info['name']='nicole'
+# user_info['email']='14nicole'
+# print(check_register(user_info))
 

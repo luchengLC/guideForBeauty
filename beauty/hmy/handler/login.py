@@ -15,11 +15,13 @@ def handle_login(request):
         data = check_login(user, pwd)
         if data['error_code'] == 0:
             print('=================')
-            request.session['username'] = data['name']
-            request.session['name'] = data['name']
+            request.session['username'] = user
+            request.session['name'] = data['username']
             print('--------------')
-            print(request.session['username'])
-            request.session.set_expiry(600)
+            print(request.session['username'].session_key)
+            print(request.session['name'])
+            # session data: 7 days
+            request.session.set_expiry(60*60*24*7)
     return JsonResponse(data, safe=False)
 
 
@@ -55,4 +57,4 @@ def check_login(user, pwd):
     return data
 
 
-print(check_login('13411989237', '123456'))
+# print(check_login('13411989237', '123456'))
