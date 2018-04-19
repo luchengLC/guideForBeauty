@@ -9,23 +9,13 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'guideForBeauty.settings'
 django.setup()
 from beauty.models import UserCutPriceProduct
 
+
 # 检查用户手机号码格式是否正确
 def check_phone(user_phone):
     if((user_phone is None) or (user_phone == "")):
         return False
     else:
         return True
-
-# 检查手机号码对应的用户是否已经注册
-# def isExist_phone(user_phone):
-#     # 测试，应该从用户表中获取用户的手机号码列表
-#     users_phone = []
-#     users_phone.append("13411984676")
-#     users_phone.append("13411984673")
-#     if(users_phone in users_phone):
-#         return True
-#     else:
-#         return False
 
 # 从数据库获取用户关注的商品列表
 def get_products_list(user_phone = ""):
@@ -91,5 +81,4 @@ if __name__ == '__main__':
     # http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=卡姿兰蜗牛气垫调控霜&PageNo=1
     # keyword = '卡姿兰蜗牛气垫调控霜'
     j = handle_search("e")
-
     print(j.content)

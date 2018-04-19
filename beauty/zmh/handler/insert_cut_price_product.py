@@ -9,24 +9,13 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'guideForBeauty.settings'
 django.setup()
 from beauty.models import UserCutPriceProduct
 from django.db.models import Q
-import  json
+
 # 检查用户手机号码格式是否正确
 def check_phone(user_phone):
     if((user_phone is None) or (user_phone == "")):
         return False
     else:
         return True
-
-# 检查手机号码对应的用户是否已经注册
-# def isExist_phone(user_phone):
-#     # 测试，应该从用户表中获取用户的手机号码列表
-#     users_phone = []
-#     users_phone.append("13411984676")
-#     users_phone.append("13411984673")
-#     if(users_phone in users_phone):
-#         return True
-#     else:
-#         return False
 
 # 验证该用户是否重复点击同一个商品
 def checkAdd(product_json):

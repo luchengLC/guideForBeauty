@@ -2,15 +2,12 @@
 import urllib.request
 import json
 import pymysql
-# import haystack
-import jieba
 import datetime
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from sklearn.feature_extraction.text import CountVectorizer
 import jieba
-import math
 from urllib import parse
 import jieba.analyse
 import numpy as np
@@ -271,3 +268,4 @@ if __name__=='__main__':
         pass
     for i in range(len(res['data'])):
         print(res['data'][i]['name'],res['data'][i]['address'])
+

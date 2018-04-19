@@ -9,6 +9,8 @@ import json
 import django
 from django.db.models.functions import Now
 import os
+from beauty.zmh.dysms_python.dysms_python.demo_sms_send import send_sms
+import uuid
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'guideForBeauty.settings'
 django.setup()
@@ -90,7 +92,9 @@ class UpdatePriceCommment:
     def update_price_comment(self,product = ProductLipstick):
         while True:
             try:
+
                 url = product.address
+                print(url)
                 new_price = ""
                 new_comment_count = ""
                 old_comment_count = ""
@@ -140,8 +144,8 @@ class UpdatePriceCommment:
     def get_products_list(self):
         try:
             max_id = 6
-            products = self.product_table.objects.filter(id__lt=max_id)
-            # products = self.product_table.objects.all()
+            # products = self.product_table.objects.filter(id__lt=max_id)
+            products = self.product_table.objects.all()
             products = list(products)
             return products
         except Exception as e:
@@ -156,9 +160,9 @@ class UpdatePriceCommment:
         user_phone = ""
         for p_u in product_users:
             user_phone = p_u.user_phone
-            # 调用发送短信的方法
-
-
+            __business_id = uuid.uuid1()
+            params = p_u.product_name
+            print(send_sms(__business_id, user_phone, "美妆商品导购系统", "SMS_130925712", params))
         pass
 
 if __name__ == '__main__':
@@ -169,14 +173,17 @@ if __name__ == '__main__':
 
     # id = 1
     products = test.get_products_list()
-    threads = []
-    for product in products:
-        threads.append(threading.Thread(target=test.update_price_comment, args=(product,)))
 
-    for thread in threads:
-        thread.start()
-    for thread in threads:
-        thread.join()
+    for product in products:
+        test.update_price_comment(product)
+    # threads = []
+    # for product in products:
+    #     threads.append(threading.Thread(target=test.update_price_comment, args=(product,)))
+    #
+    # for thread in threads:
+    #     thread.start()
+    # for thread in threads:
+    #     thread.join()
 
 
 

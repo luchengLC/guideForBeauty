@@ -14,7 +14,7 @@ file_path = (os.path.dirname(os.path.dirname(os.path.abspath("similarity_util.py
 #根据topK words 找出跟这些词最接近的词汇
 def get_similar_type(keywords):
     tables = ['眼','唇','香水','底妆']
-    sentences=word2vec.Text8Corpus(file_path+"train_files/descriptions.txt")
+    sentences=word2vec.Text8Corpus(file_path+"train_files/descriptions.txt") # 训练语料库
     model=word2vec.Word2Vec(sentences, size=100)
     print(keywords)
     max = 0
