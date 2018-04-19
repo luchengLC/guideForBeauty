@@ -148,9 +148,12 @@
       this.$nextTick(function () {
         this.activeIndex = this.actives;
         // 设置 验证session
-        this.checkLogin();
-        this.isLogin = false;
-        this.isLogout = true;
+//        this.checkLogin();
+        this.isLogin = true;
+        this.isLogout = false;
+
+//        this.isLogin = false;
+//        this.isLogout = true;
       })
     },
     methods: {

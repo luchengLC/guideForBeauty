@@ -9,12 +9,12 @@ def handle_check_login(request):
     data = {}
     # print('+++++++++++++++++++++++++')
 
-    username = '13411977340'
-    name = '卢程'
+    # username = '13411977340'
+    # name = '卢程'
     # print(request.session['username'])
     # print(request.session['name'])
-    if request.session.get('username',None):
-        username = request.session['username']
+    if request.session.get('name',None):
+        username = request.session['name']
         data['error_code'] = 0
         data['msg'] = 'success'
         data['username'] = username
