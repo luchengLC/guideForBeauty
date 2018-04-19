@@ -18,10 +18,10 @@ def handle_login(request):
             request.session['username'] = user
             request.session['name'] = data['username']
             print('--------------')
-            print(request.session['username'].session_key)
-            print(request.session['name'])
+            # print(request.session['username'].session_key)
             # session data: 7 days
             request.session.set_expiry(60*60*24*7)
+            print(request.session['name'])
             print(request.session['username'])
 
     return JsonResponse(data, safe=False)

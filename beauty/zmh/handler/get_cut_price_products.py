@@ -64,6 +64,7 @@ def get_result_list(products_list=[]):
 
 @require_http_methods(["GET"])
 def handle_search(request):
+
         user_phone = request.GET.get('user_phone')
         # user_phone = '13411984677'
         print (user_phone)
@@ -74,6 +75,7 @@ def handle_search(request):
             result['msg'] = "服务器异常"
         else:
             result = get_result_list(products_list)
+
         print (result)
         return JsonResponse(result,safe=False)
 
