@@ -21,7 +21,7 @@
           <p class="text" :title="item.name">{{item.name}}</p>
           <div class="btn-div">
             <p class="price">{{item.price}}</p>
-            <el-button class="price-btn" type="text">移除关注</el-button>
+            <!--<el-button class="price-btn" type="text">移除关注</el-button>-->
           </div>
           <div class="btn-div">
             <!--<p class="store">{{item.store}}</p>-->
@@ -113,6 +113,7 @@
                   ress[i]['img_url'] = ress[i]['img_url'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
                 }
                 _this.hotGoods = ress;
+                _this.$message.success(res['msg'])
 
               } else {  // 失败
                 _this.$message.error(res['msg'])

@@ -115,7 +115,6 @@
     },
     mounted: function () {
       this.$nextTick(function () {
-
         this.init();
       })
     },

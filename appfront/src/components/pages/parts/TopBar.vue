@@ -91,6 +91,19 @@
       </span>
     </el-dialog>
 
+    <!--注销 对话框-->
+    <el-dialog
+      title="注销"
+      :visible.sync="dialogLogoutVisible"
+      width="500px"
+      :before-close="handleLogoutCansel">
+      <p>您是否确定退出登录？</p>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleLogoutCansel">取 消</el-button>
+        <el-button type="primary" @click="handleLogoutSubmit">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 
 
@@ -103,9 +116,12 @@
     props: ["actives"],
     data () {
       return {
-        username: '13411984676',  // 从cookie中拿到的username，假数据
+        username: '13411984676',
+        usernameTmp:'',
+        name: '',
         dialogLoginVisible: false,
         dialogRegisterVisible: false,
+        dialogLogoutVisible: false,
         btnRegister: '注册',
         btnLogin: '登录',
         btnName: '',
@@ -147,30 +163,35 @@
     mounted: function () {
       this.$nextTick(function () {
         this.activeIndex = this.actives;
+        this.btnName= '游客',
         // 设置 验证session
-//        this.checkLogin();
+
         this.isLogin = true;
         this.isLogout = false;
 
-//        this.isLogin = false;
-//        this.isLogout = true;
+        this.checkLogin();
+//        this.isLogin = true;
+//        this.isLogout = false;
+
+
       })
     },
     methods: {
       handleLoginCansel(done) {  //登录
         this.dialogLoginVisible = false;
         this.$refs['loginForm'].resetFields();  // 清空
-//        this.$confirm('确认关闭？')
-//          .then(_ => {
-//            done();
-//          })
-//          .catch(_ => {});
       },
       handleRegisterCansel(done) {  // 注册
         //
         this.dialogRegisterVisible = false;
         this.$refs['loginForm'].resetFields();  // 清空
       },
+      handleLogoutCansel(done) {  // 注销
+        //
+        this.dialogLogoutVisible = false;
+      },
+
+      //dialogLogoutVisible
       handleLoginSubmit(){  //登录
         let _this = this;
         // 处理
@@ -184,15 +205,24 @@
             let params = new URLSearchParams();
             params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
             params.append('password', this.loginForm.password);
+            this.usernameTmp = this.loginForm.username;
 
             this.$http({
               method: 'post',
               url: url,
               data: params
             }).then(function (response) {
-                _this.btnName = response.data.username;
-                _this.isLogout = true;
-                _this.isLogin = false;
+                if (response.data.error_code == 0) {
+                  _this.isLogout = true;
+                  _this.isLogin = false;
+                  _this.btnName = response.data.username;
+                  _this.name = _this.btnName;
+                  _this.username = _this.usernameTmp;
+                } else  {
+                  _this.isLogout = false;
+                  _this.isLogin = true;
+                }
+
                 _this.$message.success(response.data.msg);
               })
               .catch(function (error) {
@@ -220,21 +250,30 @@
             params.append('name', this.loginForm.name);
             params.append('email', this.loginForm.email);
 
+            this.usernameTmp = this.loginForm.username;
+
             this.$http({
               method: 'post',
               url: url,
               data: params
             })
               .then(function (response) {
-                _this.btnLogin = response.data.username;
-                _this.isLogin = true;
-                _this.$message.success(response.data.msg);
+                if (response.data.error_code == 0) {
+                  _this.isLogout = true;
+                  _this.isLogin = false;
+                  _this.btnName = response.data.username;
+                  _this.name = _this.btnName;
+                  _this.username = _this.usernameTmp;
+                } else  {
+                  _this.isLogout = false;
+                  _this.isLogin = true;
+                }
               })
               .catch(function (error) {
                 _this.$message.error(response.data.msg);
               });
 
-            this.dialogLoginVisible = false;
+            this.dialogRegisterVisible = false;
             this.$refs['loginForm'].resetFields();  // 清空
           } else {
             _this.$message.error('注册不成功！');
@@ -242,6 +281,32 @@
           }
         });
       },
+      handleLogoutSubmit(){  // 注销
+        let _this = this;
+        this.$http.get('http://127.0.0.1:8000/beauty/user/logout')
+          .then((response) => {
+            let res = response.data;
+            console.log('logout  submit!!');
+
+            if (res.error_code === 0) {
+              console.log(res);
+              _this.btnName = res.username;
+              _this.isLogin = true;
+              _this.isLogout = false;
+
+              _this.dialogLogoutVisible = false;
+
+              // 跳回首页
+              _this.getIndex();
+              // 重新刷新——更新Cookie变化
+              location.reload()
+            } else {
+              console.log(res['msg']);
+            }
+          })
+      },
+
+      // 维护登录状态
       checkLogin() {
         let _this = this;
         this.$http.get('http://127.0.0.1:8000/beauty/user/home')
@@ -250,16 +315,29 @@
 
             if (res.error_code === 0) {
               console.log(res);
-              _this.btnName = res.username;
-              _this.isLogin = true;
-              _this.isLogout = false;
+              _this.btnName = res.name;
+              _this.name = res.name;
+              console.log('checkLogin  函数')
+              console.log('现在username  = '+_this.username)
+              _this.username = res.username;
+              console.log('改变后username  = '+_this.username)
+              _this.isLogin = false;
+              _this.isLogout = true;
             } else {
               console.log(res['msg']);
             }
           })
       },
       getFocus(username) {
-        this.$router.push({name: 'focus', params: {username: username}});
+        console.log(this.username)
+        console.log(this.name)
+        if (this.username === '' || this.name === '游客' || this.name === '') {
+          this.$message.error('您还未注册或登录！请先进行注册登录操作！')
+        } else {
+          console.log('转跳到 通知列表')
+          console.log('现在username  = '+this.username)
+          this.$router.push({name: 'focus', params: {username: username}});
+        }
       },
       getIndex() {
         this.$router.push({name: 'index'});

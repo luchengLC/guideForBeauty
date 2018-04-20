@@ -8,7 +8,9 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import axios from 'axios';
+// axios.defaults.withCredentials=true;//让ajax携带cookie
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
 Vue.prototype.$http = axios;
 
 Vue.use(ElementUI)
