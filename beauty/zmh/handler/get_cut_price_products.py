@@ -47,8 +47,9 @@ def get_result_list(products_list=[]):
         result['msg'] = 'success'
         result['product_count'] = products_list.__len__()
         item_list = []
-        product_dict = {}
+
         for product in products_list:
+            product_dict = {}
             product_dict['name'] = product.product_name
             product_dict['item_url'] = product.product_address
             product_dict['img_url'] = product.product_img_url
@@ -66,8 +67,8 @@ def get_result_list(products_list=[]):
 def handle_search(request):
 
         user_phone = request.GET.get('user_phone')
-        # user_phone = '13411984677'
-        print (user_phone)
+        # user_phone = '13411984676'
+        print(user_phone)
         result = {}
         products_list = get_products_list(user_phone)
         if products_list == -1:
