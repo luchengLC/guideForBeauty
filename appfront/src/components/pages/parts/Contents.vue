@@ -44,7 +44,7 @@
           <div class="price-div">
             <div class="price-p">￥<span class="price">{{item.price}}</span></div>
             <div class="btn-div">
-              <el-button @click="getCutPrice(item, username)" class="price-btn" type="text">降价通知</el-button>
+              <el-button @click="getChosenItem(item)" class="price-btn" type="text">降价通知</el-button>
               <el-button @click="getSimilar(index, item)" class="similar-btn" type="text">找相似物</el-button>
             </div>
           </div>
@@ -61,7 +61,7 @@
         @current-change="handleCurrentChange"
         background
         layout="prev, pager, next"
-        :page-size = "20"
+        :page-size="20"
         :total="pageCount"
         :current-page.sync="currentPage">
       </el-pagination>
@@ -78,7 +78,7 @@
       <p>的降价变动?</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="getCutPrice">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -93,8 +93,9 @@
 
     data () {
       return {
-        username: '13411984676',  // 从cookie中拿到的username，假数据
+        username: '13411984676',  // 从TopBar中拿到的username，假数据
         currentPage: 1,   // 当前页
+        chosenItem: {},   // 暂存被选择的item， 增加到降价通知列表过程中
         dialogVisible: false,
         fullscreenLoading: false,
         order: 'df',
@@ -113,7 +114,7 @@
         } else {
           this.fullscreenLoading = true;
           let kw = this.input.replace(' ', '%20');
-          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd='+kw+'&PageNo='+pageNo+'&order='+order)
+          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=' + kw + '&PageNo=' + pageNo + '&order=' + order)
             .then((response) => {
               this.res = response.data
               if (this.res.error_code === 0) {
@@ -130,11 +131,11 @@
 
               } else {  // 失败
                 this.$message.error('没有查找到对应的商品，请重试！')
-                console.log(this.res['msg']);
+                // console.log(this.res['msg']);
               }
               this.fullscreenLoading = false;
             });
-//          console.log(decodeURIComponent('%E5%AE%9D%E6%A0%BC%E4%B8%BD%EF%BC%88BVLGARI%EF%BC%89%E7%A2%A7%E8%93%9D%E7%94%B7%E6%80%A7%E6%B7%A1%E9%A6%99%E6%B0%B4%2050ml%EF%BC%88%E6%B0%B4%E8%83%BD%E9%87%8F%20%E9%A6%99%E6%B0%B4%E7%94%B7%E5%A3%AB%EF%BC%89'));
+//          // console.log(decodeURIComponent('%E5%AE%9D%E6%A0%BC%E4%B8%BD%EF%BC%88BVLGARI%EF%BC%89%E7%A2%A7%E8%93%9D%E7%94%B7%E6%80%A7%E6%B7%A1%E9%A6%99%E6%B0%B4%2050ml%EF%BC%88%E6%B0%B4%E8%83%BD%E9%87%8F%20%E9%A6%99%E6%B0%B4%E7%94%B7%E5%A3%AB%EF%BC%89'));
 
         }
       },
@@ -148,26 +149,57 @@
         this.order = order;
         this.search(order);
       },
-      getCutPrice(item, username) {   // 增-降价通知
+      getChosenItem(item) {
         this.dialogVisible = true;
-        this.pname = item.name
-        console.log(item);
-        console.log(username);
+        this.chosenItem = item;
+      },
+      getCutPrice() {   // 增-降价通知 接口
+        let item = this.chosenItem;
+        let username = this.username;
+        let _this = this;
+        if (username === '') {
+          this.$message.error('您还未注册或登录！请先进行注册登录操作！')
+        } else {
+          let url = 'http://127.0.0.1:8000/beauty/cut_price/add_product'
+          let params = new URLSearchParams();
+          params.append('user_phone', username);
+          params.append('item_url', item.address);
+          params.append('name', item.name);
+          params.append('img_url', item.img1_address);
+          params.append('price', item.price);
+          params.append('platform', item.platform);
+          params.append('comment_count', item.comment_count);
+
+          this.$http({
+            method: 'post',
+            url: url,
+            data: params
+          })
+            .then(function (response) {
+                console.log(response.data)
+              if (response.data.error_code === 0) {  // 成功
+                _this.$message.success(response.data.msg);
+                _this.dialogVisible = false;
+              } else {  // 失败
+                _this.$message.error(response.data.msg);
+                _this.dialogVisible = false;
+              }
+            })
+            .catch(function (error) {
+              _this.$message.error(response.data.msg);
+            });
+        }
+
       },
       getSimilar(index, item) {   // 相似商品
-        console.log('index='+index);
-        console.log(item);
+        // console.log('index='+index);
+        // console.log(item);
         this.$router.push({name: 'similar', params: {item: item}});
         // 想办法把相似商品在新的页面打开
-//        const hre = this.$router.resolve({
-//          name: 'similar',
-//          params: {item: item}
-//        })
-//        window.open('_blank', hre)
+        // ....
       },
 
       handleClose(done) {
-        this.$message.success('成功！');
         this.dialogVisible = false;
       },
       handleCurrentChange(currentPage) {

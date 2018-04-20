@@ -40,14 +40,13 @@ INSTALLED_APPS = [
 
 # 跨域注意中间件的添加顺序
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # 增加，解决跨域问题
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # 增加，解决跨域问题
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',  # 增加，解决跨域问题
 ]
 

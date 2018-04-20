@@ -21,7 +21,7 @@
           <p class="text" :title="item.name">{{item.name}}</p>
           <div class="btn-div">
             <p class="price">{{item.price}}</p>
-            <el-button class="price-btn" type="text">移除关注</el-button>
+            <!--<el-button class="price-btn" type="text">移除关注</el-button>-->
           </div>
           <div class="btn-div">
             <!--<p class="store">{{item.store}}</p>-->
@@ -88,13 +88,13 @@
     methods: {
       init() {
         this.username = this.$route.params.username;
-        console.log(this.username);
-        console.log('传参 sussess');
+        // console.log(this.username);
+        // console.log('传参 sussess');
         this.hotGoods=[];
         this.handleGetFocusGoods();
       },
       handleGetFocusGoods(){
-        console.log('handleGetFocusGoods');
+        // console.log('handleGetFocusGoods');
         let _this = this;
         if (this.username === '') {
           this.$message.error('操作失误，请重新操作！')
@@ -103,8 +103,8 @@
           this.$http.get(url)
             .then((response) => {
               let res = response.data;
-              console.log('========================')
-              console.log(res);
+              // console.log('========================')
+              // console.log(res);
               if (res.error_code === 0) {
                 // 成功
                 let ress = res['data']['item_list'];
@@ -113,10 +113,11 @@
                   ress[i]['img_url'] = ress[i]['img_url'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
                 }
                 _this.hotGoods = ress;
+                _this.$message.success(res['msg'])
 
               } else {  // 失败
                 _this.$message.error(res['msg'])
-                console.log(res['msg']);
+                // console.log(res['msg']);
               }
               _this.fullscreenLoading = false;
             });

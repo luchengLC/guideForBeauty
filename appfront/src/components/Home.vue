@@ -84,7 +84,7 @@
               this.showStu()
             } else {
               this.$message.error('没有查找到对应的商品，请重试！')
-              console.log(res['msg'])
+              // console.log(res['msg'])
             }
           })
 
@@ -92,15 +92,15 @@
       showStu(){
         this.$http.get('http://127.0.0.1:8000/beauty/show_student')
           .then((response) => {
-            console.log("我就测测~")
-            console.log(response)
+            // console.log("我就测测~")
+            // console.log(response)
             var res = response.data
-            console.log(res)
+            // console.log(res)
             if (res.error_num === 0) {
               this.responseList = res['list']
             } else {
               this.$message.error('查询学生信息失败')
-              console.log(res['msg'])
+              // console.log(res['msg'])
             }
           })
       },
@@ -110,14 +110,14 @@
       showItemList(command){
         this.$http.get('http://127.0.0.1:8000/beauty/show_list?cmd='+command)
           .then((response) => {
-            console.log(response)
+            // console.log(response)
             this.res = response.data  // 这里不能不用变量res缓存
-            console.log(response.data)
+            // console.log(response.data)
             if (this.res.error_num === 0) {
               this.responseList = this.res['list']
             } else {
               this.$message.error('获取商品列表内容失败')
-              console.log(this.res['msg'])
+              // console.log(this.res['msg'])
             }
           })
       },
@@ -132,22 +132,22 @@
           // 判断搜索框是否有内容
 
 
-        console.log('进入搜索方法')
+        // console.log('进入搜索方法')
         if(this.selectedClassify === '选择分类') {
           this.selectedClassify = '底妆'
         }
-        console.log(this.selectedClassify)
+        // console.log(this.selectedClassify)
         this.$http.get('http://127.0.0.1:8000/beauty/show_search_list?cmd='+this.selectedClassify+'&name='+this.input)
           .then((response) => {
-            console.log(response)
-            console.log(this.input) /// 打印搜索框内容，检测
+            // console.log(response)
+            // console.log(this.input) /// 打印搜索框内容，检测
             this.res = response.data
-            console.log(this.res)
+            // console.log(this.res)
             if (this.res.error_num === 0) {
               this.responseList = this.res['list']
             } else {
               this.$message.error('获取搜索列表内容失败')
-              console.log(this.res['msg'])
+              // console.log(this.res['msg'])
             }
           })
       },
