@@ -132,7 +132,7 @@
 
     watch: {
       '$route'(to, from){
-        this.init();
+//        this.init();
       }
     }
   }

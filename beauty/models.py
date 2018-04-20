@@ -620,6 +620,7 @@ class ProductBasemakeup(models.Model):
     brand = models.CharField(max_length=255, blank=True, null=True)
     produce_address = models.CharField(max_length=255, blank=True, null=True)
     comment_count = models.CharField(max_length=50, blank=True, null=True)
+    comment_increment = models.IntegerField()  # 新增评论数
     kg = models.CharField(max_length=255, blank=True, null=True)
     good_for_who = models.CharField(max_length=255, blank=True, null=True)
     expiration_date = models.CharField(max_length=255, blank=True, null=True)
@@ -674,6 +675,7 @@ class ProductEye(models.Model):
     brand = models.CharField(max_length=255, blank=True, null=True)
     produce_address = models.CharField(max_length=255, blank=True, null=True)
     comment_count = models.CharField(max_length=50, blank=True, null=True)
+    comment_increment = models.IntegerField()  # 新增评论数
     kg = models.CharField(max_length=255, blank=True, null=True)
     good_for_who = models.CharField(max_length=255, blank=True, null=True)
     expiration_date = models.CharField(max_length=255, blank=True, null=True)
@@ -792,6 +794,7 @@ class ProductOtherPerfume(models.Model):
     img5_address = models.CharField(max_length=100, blank=True, null=True)
     platform = models.CharField(max_length=255, blank=True, null=True)
     comment_count = models.CharField(max_length=50, blank=True, null=True)
+    comment_increment = models.IntegerField()  # 新增评论数
     description = models.CharField(max_length=255, blank=True, null=True)
     get_time = models.CharField(max_length=255, blank=True, null=True)
     key_words = models.CharField(max_length=255, blank=True, null=True)
@@ -820,6 +823,7 @@ class ProductPerfume(models.Model):
     brand = models.CharField(max_length=255, blank=True, null=True)
     produce_address = models.CharField(max_length=255, blank=True, null=True)
     comment_count = models.CharField(max_length=50, blank=True, null=True)
+    comment_increment = models.IntegerField()  # 新增评论数
     new_comment_count = models.CharField(max_length=50, blank=True, null=True)
     kg = models.CharField(max_length=255, blank=True, null=True)
     good_for_who = models.CharField(max_length=255, blank=True, null=True)

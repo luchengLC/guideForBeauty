@@ -9,7 +9,7 @@ import json
 import django
 from django.db.models.functions import Now
 import os
-from beauty.zmh.dysms_python.dysms_python.demo_sms_send import send_sms
+# from beauty.zmh.dysms_python.dysms_python.demo_sms_send import send_sms
 import uuid
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'guideForBeauty.settings'
@@ -18,14 +18,11 @@ from beauty.models import ProductLipstick,UserCutPriceProduct
 from django.db.models import Count, Avg, Max, Min, Sum
 
 
-
+from beauty.lps.handler.updateTianMaoItem import updateTianMaoData
 
 
 class UpdatePriceCommment:
     def __init__(self):
-        # self.url = ""
-        # self.html = ""
-        # self.product_table = ProductLipstick
         self.product_table = ProductLipstick
 
     # 根据url下载html
@@ -49,8 +46,14 @@ class UpdatePriceCommment:
     # 判断商品来源，
     # 若是京东，返回1，若是天猫，返回2，若是唯品会，返回3，都不是返回0
     def checkPlatfrom(self,url=""):
-        if url.find('jd'):
+        if url.find('item.jd.com'):
             return 1
+        elif url.find('detail.tmall.com'):
+            return 2
+        elif url.find("detail.vip.com"):
+            return 3
+        else:
+            return 0
 
     # 获取京东价格
     def get_jd_price(self,skuId):
@@ -96,11 +99,12 @@ class UpdatePriceCommment:
                 url = product.address
                 print(url)
                 new_price = ""
+                old_price = ""
                 new_comment_count = ""
                 old_comment_count = ""
                 new_good_comment_rate = ""
 
-                if (self.checkPlatfrom(url) == 1):
+                if ("京东" in product.platform):
                     skuId = url.split('/')[-1].strip(".html")
                     print(skuId)
                     new_price = self.get_jd_price(skuId)
@@ -109,33 +113,40 @@ class UpdatePriceCommment:
                     new_comment_count = result['comment_count']
                     print(new_comment_count)
                     new_good_comment_rate = result['good_comment_rate']
-                    old_comment_count = product.new_comment_count
-                    print(old_comment_count)
-                new_price = float(new_price)
-                old_price = float(product.price)
+                    # old_comment_count = product.new_comment_count
+                    print(new_good_comment_rate)
+                    # 更新评论总数
+                    product.comment_increment = int(new_comment_count - product.comment_count)
+                    product.comment_count = int(new_comment_count)
 
-                print("更新前的价格" + str(old_price))
+                    print("更新后的评论总数" + str(product.comment_count))
+                    print("新增评论总数" + str(product.comment_increment))
+                    # 更新好评率
+                    product.good_comment_percentage = new_good_comment_rate
+                    product.get_time = Now()
+                    print("更新后的好评率" + str(new_good_comment_rate))
+                    old_price = str(product.price)
+                    product.price = new_price
+
+                    product.save()
+
+                elif("天猫" in product.platform):
+                    updataUtil = updateTianMaoData()
+                    new_price = updataUtil.update_tianmao(product.number, product.comment_count)
+
+
+                # print("更新前的价格" + str(old_price))
                 print("更新后的价格" + str(new_price))
-                print("更新前的评论总数" + str(product.comment_count)+"第2次"+str(product.new_comment_count))
 
-                # 更新价格和降价通知
+                # 降价通知
                 if new_price != old_price:
                     if new_price < old_price:
                         # 短信通知
                         self.inform_price_reduce(url)
                         pass
                     # 更新价格
-                    product.price = new_price
                     print(product.price)
-                # 更新评论总数
-                product.comment_count = product.new_comment_count
-                product.new_comment_count = new_comment_count
-                print("更新后的评论总数" + str(product.comment_count) + str(product.new_comment_count))
-                # 更新好评率
-                product.good_comment_percentage = new_good_comment_rate
-                product.get_time = Now()
-                print("更新后的好评率" + str(new_good_comment_rate))
-                product.save()
+
             except Exception as e:
                 print(e)
                 pass
@@ -144,8 +155,8 @@ class UpdatePriceCommment:
     def get_products_list(self):
         try:
             max_id = 6
-            # products = self.product_table.objects.filter(id__lt=max_id)
-            products = self.product_table.objects.all()
+            products = self.product_table.objects.filter(platform="天猫")
+            # products = self.product_table.objects.all()
             products = list(products)
             return products
         except Exception as e:
@@ -158,12 +169,12 @@ class UpdatePriceCommment:
         product_users = list(product_users)
         # user_phones = []
         user_phone = ""
-        for p_u in product_users:
-            user_phone = p_u.user_phone
-            __business_id = uuid.uuid1()
-            params = p_u.product_name
-            print(send_sms(__business_id, user_phone, "美妆商品导购系统", "SMS_130925712", params))
-        pass
+        # for p_u in product_users:
+        #     user_phone = p_u.user_phone
+        #     __business_id = uuid.uuid1()
+        #     params = p_u.product_name
+        #     print(send_sms(__business_id, user_phone, "美妆商品导购系统", "SMS_130925712", params))
+        # pass
 
 if __name__ == '__main__':
     test = UpdatePriceCommment()

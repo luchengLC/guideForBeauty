@@ -23,7 +23,7 @@ from beauty.zmh.handler import get_cut_price_products
 from beauty.zmh.handler import insert_cut_price_product
 from beauty.lc.handler import home
 from beauty.lc.handler import logout
-
+from beauty.lps.handler import lpsInerface
 
 urlpatterns = [
     # url(r'show_student$', views.show_student, ),
@@ -35,21 +35,24 @@ urlpatterns = [
     #  cj 接口路由
     url(r'productsList/getProductsPage', mapping_handler.handle_search),
 
-    #hmy接口路由
-    #相似商品
-    url(r'productsList/getAllSimilarProducts',get_similar_products.handle_search),
-    #注册
-    url(r'user/register',register.handle_register),
-    #登录
-    url(r'user/login',login.handle_login),
+    # hmy接口路由
+    # 相似商品
+    url(r'productsList/getAllSimilarProducts', get_similar_products.handle_search),
+    # 注册
+    url(r'user/register', register.handle_register),
+    # 登录
+    url(r'user/login', login.handle_login),
 
     # zmh接口路由
-    url(r'cut_price/get_products',get_cut_price_products.handle_search),
+    url(r'cut_price/get_products', get_cut_price_products.handle_search),
     url(r'cut_price/add_product', insert_cut_price_product.handle_insert),
 
-
     # lc 主页验证登录
-    url(r'user/home',home.handle_check_login),
-    url(r'user/logout',logout.handle_logout),
+    url(r'user/home', home.handle_check_login),
+    url(r'user/logout', logout.handle_logout),
+
+    # lps接口路由
+    url(r'^hotProduct', lpsInerface.getHotProduct),
+    url(r'^updateTianMaoData', lpsInerface.update_tianmao),
 
 ]

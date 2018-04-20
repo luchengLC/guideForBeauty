@@ -6,10 +6,8 @@
       <div class="div-input">
         <el-input class="search-input" placeholder="请输入内容" v-model="input"></el-input>
         <el-button class="search-btn" slot="append" icon="el-icon-search" @click="search(order)"
-                   v-loading.fullscreen.lock="fullscreenLoading"
-        ></el-button>
-
-
+                   v-loading.fullscreen.lock="fullscreenLoading">
+        </el-button>
       </div>
       <!--价格排序 下拉选择框-->
       <div>
@@ -21,10 +19,14 @@
       </div>
     </div>
 
+    <div class="hot-search"  v-if="hotSearchShow">
+      <h2>{{showWords}}</h2>
+
+    </div>
+
 
     <!--item 表-->
-    <div class="hot-search">
-      <h2>{{showWords}}</h2>
+    <div class="search-result" v-if="searchResultShow">
       <div class="goods-container">
         <div class="goods-item" v-for="(item, index) in searchGoods" :key="index">
           <a :href="item.address" :title="item.name" target="_blank">
@@ -98,11 +100,13 @@
         chosenItem: {},   // 暂存被选择的item， 增加到降价通知列表过程中
         dialogVisible: false,
         fullscreenLoading: false,
+        searchResultShow: true,
+        hotSearchShow: false,
         order: 'df',
         pname: '',
         res: {},
         input: '',
-        showWords: '',
+        showWords: '今日热搜',
         pageCount: 0,
         searchGoods: [],
       }
@@ -237,7 +241,7 @@
     /*width: 70%;*/
     /*margin: 10px auto 0;*/
     /*}*/
-    .hot-search {
+    .search-result {
       width: 1226px;
       margin: 26px auto 0;
       h2 {
