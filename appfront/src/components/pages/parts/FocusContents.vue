@@ -88,13 +88,13 @@
     methods: {
       init() {
         this.username = this.$route.params.username;
-        console.log(this.username);
-        console.log('传参 sussess');
+        // console.log(this.username);
+        // console.log('传参 sussess');
         this.hotGoods=[];
         this.handleGetFocusGoods();
       },
       handleGetFocusGoods(){
-        console.log('handleGetFocusGoods');
+        // console.log('handleGetFocusGoods');
         let _this = this;
         if (this.username === '') {
           this.$message.error('操作失误，请重新操作！')
@@ -103,8 +103,8 @@
           this.$http.get(url)
             .then((response) => {
               let res = response.data;
-              console.log('========================')
-              console.log(res);
+              // console.log('========================')
+              // console.log(res);
               if (res.error_code === 0) {
                 // 成功
                 let ress = res['data']['item_list'];
@@ -117,7 +117,7 @@
 
               } else {  // 失败
                 _this.$message.error(res['msg'])
-                console.log(res['msg']);
+                // console.log(res['msg']);
               }
               _this.fullscreenLoading = false;
             });

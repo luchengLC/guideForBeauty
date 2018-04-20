@@ -1,6 +1,6 @@
 MEILIANCHEN
-syrinx
 MAKE UP FOR EVER
+syrinx
 SHVYOGE
 RED&BLACK;
 仙女
@@ -61,9 +61,9 @@ Manuka bee
 蓝金哑
 卡奇色彩
 芬呢欧
+HANXUAN HERBAL
 阿芙
 肤草集
-HANXUAN HERBAL
 GREEN MAGIC VINE
 零晕染
 格兰猫
@@ -322,8 +322,8 @@ lanxiu
 薄荷
 海胆
 LA PERSONAL
-LAC
 深梅子
+LAC
 绝色
 施巴
 MACICOS
@@ -459,7 +459,6 @@ LANSUR
 尚惠
 百蕾适
 JIEMEIZIYANGYE
-AFU
 Meiko
 ZA
 梵奈
@@ -751,6 +750,7 @@ JOUO
 雅顿
 芯细圆
 泊美
+MAKE-UP FOR YOU
 艾米尔
 秒杀
 冰菊
@@ -994,7 +994,6 @@ Palladio
 Revlon
 水尚
 KATE
-芦芝
 LIANYI
 轻雾感
 自然乐园
@@ -1295,6 +1294,7 @@ CHARMPAN
 舒耐高
 Munion
 花漾
+AFU
 JIUJIEMEI
 斩男
 番茄派
@@ -1331,6 +1331,6 @@ JUESE
 cutemer
 港版
 HELIANNA
-MAKE-UP FOR YOU
+芦芝
 BENETIFUL
 细小

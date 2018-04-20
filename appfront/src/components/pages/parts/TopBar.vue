@@ -41,7 +41,7 @@
         <el-button type="primary" @click="handleLoginSubmit">确 定</el-button>
       </span>
     </el-dialog>
-    
+
     <!--注册 对话框-->
     <el-dialog
       title="注册"
@@ -70,9 +70,9 @@
       </span>
     </el-dialog>
 
-    <!--注销 对话框-->
+    <!--退出 对话框-->
     <el-dialog
-      title="注销"
+      title="退出"
       :visible.sync="dialogLogoutVisible"
       width="500px"
       :before-close="handleLogoutCansel">
@@ -95,8 +95,9 @@
     props: ["actives"],
     data () {
       return {
-        username: '13411984676',
-        usernameTmp:'',
+        mockUserNo: '13411984676', // 假的用户账号，用于模拟 传给Contents组件来对接“增-降价通知”
+        username: '',
+        usernameTmp:'',  // 辅助
         name: '',
         dialogLoginVisible: false,
         dialogRegisterVisible: false,
@@ -104,7 +105,7 @@
         btnRegister: '注册',
         btnLogin: '登录',
         btnName: '',
-        btnLogout: '注销',
+        btnLogout: '退出',
         activeIndex: '',
         isLogin : false,
         isLogout : true,
@@ -165,7 +166,7 @@
         this.dialogRegisterVisible = false;
         this.$refs['loginForm'].resetFields();  // 清空
       },
-      handleLogoutCansel(done) {  // 注销
+      handleLogoutCansel(done) {  // 退出
         //
         this.dialogLogoutVisible = false;
       },
@@ -176,9 +177,9 @@
         // 处理
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
-            console.log('submit!!');
-            console.log(this.loginForm.username);
-            console.log(this.loginForm.password);
+            // console.log('submit!!');
+            // console.log(this.loginForm.username);
+            // console.log(this.loginForm.password);
 
             let url = 'http://127.0.0.1:8000/beauty/user/login'
             let params = new URLSearchParams();
@@ -220,7 +221,7 @@
         // 处理
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
-            console.log('submit!!');
+            // console.log('submit!!');
 
             let url = 'http://127.0.0.1:8000/beauty/user/register'
             let params = new URLSearchParams();
@@ -260,15 +261,15 @@
           }
         });
       },
-      handleLogoutSubmit(){  // 注销
+      handleLogoutSubmit(){  // 退出
         let _this = this;
         this.$http.get('http://127.0.0.1:8000/beauty/user/logout')
           .then((response) => {
             let res = response.data;
-            console.log('logout  submit!!');
+            // console.log('logout  submit!!');
 
             if (res.error_code === 0) {
-              console.log(res);
+              // console.log(res);
               _this.btnName = res.username;
               _this.isLogin = true;
               _this.isLogout = false;
@@ -280,7 +281,7 @@
               // 重新刷新——更新Cookie变化
               location.reload()
             } else {
-              console.log(res['msg']);
+              // console.log(res['msg']);
             }
           })
       },
@@ -293,28 +294,28 @@
             let res = response.data;
 
             if (res.error_code === 0) {
-              console.log(res);
+              // console.log(res);
               _this.btnName = res.name;
               _this.name = res.name;
-              console.log('checkLogin  函数')
-              console.log('现在username  = '+_this.username)
+              // console.log('checkLogin  函数')
+              // console.log('现在username  = '+_this.username)
               _this.username = res.username;
-              console.log('改变后username  = '+_this.username)
+              // console.log('改变后username  = '+_this.username)
               _this.isLogin = false;
               _this.isLogout = true;
             } else {
-              console.log(res['msg']);
+              // console.log(res['msg']);
             }
           })
       },
       getFocus(username) {
-        console.log(this.username)
-        console.log(this.name)
+        // console.log(this.username)
+        // console.log(this.name)
         if (this.username === '' || this.name === '游客' || this.name === '') {
           this.$message.error('您还未注册或登录！请先进行注册登录操作！')
         } else {
-          console.log('转跳到 通知列表')
-          console.log('现在username  = '+this.username)
+          // console.log('转跳到 通知列表')
+          // console.log('现在username  = '+this.username)
           this.$router.push({name: 'focus', params: {username: username}});
         }
       },

@@ -5,7 +5,7 @@
         © 美妆商品导购团队  版权所有
         <br /> 大创项目  汕头大学 计算机科学与技术系
         <br /> 14mhzhang@stu.edu.cn
-        <br /> 134119XXXXX
+        <br /> 13411984676
       </small>
     </footer>
   </div>
