@@ -29,10 +29,10 @@
       :before-close="handleLoginCansel">
       <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="90px">
         <el-form-item label="账号" prop="username">
-          <el-input v-model="loginForm.username" placeholder="手机号码..."></el-input>
+          <el-input type="text" v-model="loginForm.username" placeholder="手机号码..."></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" placeholder="密码..."></el-input>
+          <el-input type="password" v-model="loginForm.password" placeholder="密码..."></el-input>
         </el-form-item>
       </el-form>
 
@@ -41,28 +41,7 @@
         <el-button type="primary" @click="handleLoginSubmit">确 定</el-button>
       </span>
     </el-dialog>
-
-    <!--登录 对话框-->
-    <el-dialog
-      title="登录"
-      :visible.sync="dialogLoginVisible"
-      width="500px"
-      :before-close="handleLoginCansel">
-      <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="90px">
-        <el-form-item label="账号" prop="username">
-          <el-input v-model="loginForm.username" placeholder="手机号码..."></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" placeholder="密码..."></el-input>
-        </el-form-item>
-      </el-form>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="handleLoginCansel">取 消</el-button>
-        <el-button type="primary" @click="handleLoginSubmit">确 定</el-button>
-      </span>
-    </el-dialog>
-
+    
     <!--注册 对话框-->
     <el-dialog
       title="注册"
@@ -77,7 +56,7 @@
           <el-input v-model="loginForm.name" placeholder="昵称..."></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" placeholder="密码..."></el-input>
+          <el-input type="password" v-model="loginForm.password" placeholder="密码..."></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="loginForm.email" placeholder="邮箱..."></el-input>
