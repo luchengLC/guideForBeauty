@@ -58,17 +58,10 @@
     },
     methods: {
       init(){
+        this.fullscreenLoading = false;
         this.item = this.$route.params.item;
-        // console.log(this.item);
-        // console.log('传参 sussess');
-        // console.log(this.item['category']);
-        // console.log(this.item['name']);
 
         this.similarGoods = [];
-        // console.log('到达init');
-//        this.similarGoods.push(this.item);
-//        // console.log('this.similarGoods=')
-//        // console.log(this.similarGoods);
         this.handleGetSimilarGoods();
       },
       handleGetSimilarGoods() {
@@ -76,40 +69,45 @@
         if (this.item === null) {
           this.$message.error('操作失误，请重新操作！')
         } else {
-          this.fullscreenLoading = true;
-          let category = this.item.category;
+
+          let category = this.item['category'];
           let pname = this.item.name;
+          if (category !== undefined) {
+            this.fullscreenLoading = true;
+            // console.log('原始的pname = ' + pname);
+            // console.log('原始的category = ' + category);
+            pname = encodeURIComponent(pname);
+            // console.log('encode的pname = ' + pname);
+            let pnamem = decodeURIComponent(pname);
+            // console.log('decode的pnamem = ' + pnamem);
 
-          // console.log('原始的pname = ' + pname);
-          // console.log('原始的category = ' + category);
-          pname = encodeURIComponent(pname);
-          // console.log('encode的pname = ' + pname);
-          let pnamem = decodeURIComponent(pname);
-          // console.log('decode的pnamem = ' + pnamem);
+            // url编码
+            let url = 'http://127.0.0.1:8000/beauty/productsList/getAllSimilarProducts?category=' + category + '&pname=' + pname;
 
-          // url编码
-          let url = 'http://127.0.0.1:8000/beauty/productsList/getAllSimilarProducts?category=' + category + '&pname=' + pname;
+            this.$http.get(url)
+              .then((response) => {
+                this.res = response.data;
+                // console.log('========================')
+                // console.log(this.res);
+                if (this.res.error_code === 0) {
+                  // 成功
+                  let ress = this.res['data'];
+                  // 换大图
+                  for (let i in ress) {
+                    ress[i]['img1_address'] = ress[i]['img1_address'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
+                  }
+                  this.similarGoods = this.res['data'];
+                  this.fullscreenLoading = false;
 
-          this.$http.get(url)
-            .then((response) => {
-              this.res = response.data;
-              // console.log('========================')
-              // console.log(this.res);
-              if (this.res.error_code === 0) {
-                // 成功
-                let ress = this.res['data'];
-                // 换大图
-                for (let i in ress) {
-                  ress[i]['img1_address'] = ress[i]['img1_address'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
+                } else {  // 失败
+                  this.$message.error('没有查找到对应的相似商品，请重试！')
+                  this.fullscreenLoading = false;
+                  // console.log(this.res['msg']);
                 }
-                this.similarGoods = this.res['data'];
+                this.fullscreenLoading = false;
+              });
+          }
 
-              } else {  // 失败
-                this.$message.error('没有查找到对应的相似商品，请重试！')
-                // console.log(this.res['msg']);
-              }
-              this.fullscreenLoading = false;
-            });
         }
       }
     },

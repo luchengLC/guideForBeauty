@@ -87,6 +87,7 @@
     },
     methods: {
       init() {
+        this.fullscreenLoading= false;
         this.username = this.$route.params.username;
         // console.log(this.username);
         // console.log('传参 sussess');
@@ -99,6 +100,7 @@
         if (this.username === '') {
           this.$message.error('操作失误，请重新操作！')
         } else {
+          _this.fullscreenLoading = true;
           let url = 'http://127.0.0.1:8000/beauty/cut_price/get_products?user_phone='+this.username;
           this.$http.get(url)
             .then((response) => {
@@ -113,7 +115,7 @@
                   ress[i]['img_url'] = ress[i]['img_url'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
                 }
                 _this.hotGoods = ress;
-                _this.$message.success(res['msg'])
+//                _this.$message.success(res['msg'])
 
               } else {  // 失败
                 _this.$message.error(res['msg'])
@@ -132,7 +134,7 @@
 
     watch: {
       '$route'(to, from){
-//        this.init();
+        this.init();
       }
     }
   }

@@ -142,6 +142,7 @@
     },
     mounted: function () {
       this.$nextTick(function () {
+        this.fullscreenLoading= false;
         this.activeIndex = this.actives;
         this.btnName= '游客',
         // 设置 验证session
@@ -275,6 +276,7 @@
               _this.isLogout = false;
 
               _this.dialogLogoutVisible = false;
+              _this.fullscreenLoading = false;
 
               // 跳回首页
               _this.getIndex();
@@ -282,6 +284,7 @@
               location.reload()
             } else {
               // console.log(res['msg']);
+              _this.fullscreenLoading = false;
             }
           })
       },
@@ -320,6 +323,7 @@
         }
       },
       getIndex() {
+        this.fullscreenLoading= false;
         this.$router.push({name: 'index'});
       }
     },

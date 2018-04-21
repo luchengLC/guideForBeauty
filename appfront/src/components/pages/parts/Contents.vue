@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="hot-search"  v-if="hotSearchShow">
+    <div class="hot-search" v-if="hotSearchShow">
       <h2>{{showWords}}</h2>
       <div class="goods-container" v-loading.fullscreen.lock="fullscreenLoading">
         <div class="goods-item" v-for="(hotItem,index) in hotGoods" :key="index">
@@ -130,15 +130,24 @@
     },
     mounted: function () {
       this.$nextTick(function () {
-        this.searchResultShow=false;
-        this.hotSearchShow=true;
+        this.fullscreenLoading= false;
+        this.searchResultShow = false;
+        this.hotSearchShow = true;
         this.getHotSearch()
       })
     },
+    watch: {
+      '$route'(to, from){
+        this.fullscreenLoading= false;
+        this.searchResultShow = true;
+        this.hotSearchShow = false;
+      }
+    },
     methods: {
       searchWithPage(pageNo, order){
-        this.searchResultShow=true;
-        this.hotSearchShow=false;
+        this.searchResultShow = true;
+        this.hotSearchShow = false;
+        let _this = this;
         if (this.input === '') {
           this.$message.error('请输入搜索信息！')
         } else {
@@ -147,25 +156,26 @@
           let url = 'http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=' + kw + '&PageNo=' + pageNo + '&order=' + order;
           this.$http.get(url)
             .then((response) => {
-              this.res = response.data
-              if (this.res.error_code === 0) {
+              _this.res = response.data
+              if (_this.res.error_code === 0) {
                 // 成功
-                let ress = this.res['data']['item_list']
+                let ress = _this.res['data']['item_list']
                 // emmmmmm， 将小图换成大图
                 for (let i in ress) {
                   ress[i]['img1_address'] = ress[i]['img1_address'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
                 }
 
-                this.searchGoods = this.res['data']['item_list']
+                _this.searchGoods = this.res['data']['item_list']
                 // page数
-                this.pageCount = this.res['page_count'] * 20
+                _this.pageCount = this.res['page_count'] * 20
 
               } else {  // 失败
-                this.$message.error('没有查找到对应的商品，请重试！')
+                _this.$message.error('没有查找到对应的商品，请重试！')
                 // console.log(this.res['msg']);
               }
-              this.fullscreenLoading = false;
+              _this.fullscreenLoading = false;
             });
+
 //          // console.log(decodeURIComponent('%E5%AE%9D%E6%A0%BC%E4%B8%BD%EF%BC%88BVLGARI%EF%BC%89%E7%A2%A7%E8%93%9D%E7%94%B7%E6%80%A7%E6%B7%A1%E9%A6%99%E6%B0%B4%2050ml%EF%BC%88%E6%B0%B4%E8%83%BD%E9%87%8F%20%E9%A6%99%E6%B0%B4%E7%94%B7%E5%A3%AB%EF%BC%89'));
 
         }
@@ -207,7 +217,7 @@
             data: params
           })
             .then(function (response) {
-                console.log(response.data)
+              console.log(response.data)
               if (response.data.error_code === 0) {  // 成功
                 _this.$message.success(response.data.msg);
                 _this.dialogVisible = false;
@@ -237,12 +247,13 @@
         this.searchWithPage(currentPage, this.order);
       },
       getHotSearch() {
-        this.fullscreenLoading = true;
+//        this.fullscreenLoading = true;
+        let _this = this;
         let url = 'http://127.0.0.1:8000/beauty/hotProduct';
         this.$http.get(url)
           .then((response) => {
-            this.res = response.data
-            if (this.res.error_code === 0) {
+            _this.res = response.data
+            if (_this.res.error_code === 0) {
               // 成功
               let ress = this.res['data']['item_list']
               // emmmmmm， 将小图换成大图
@@ -250,12 +261,12 @@
                 ress[i]['img_url'] = ress[i]['img_url'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
               }
 
-              this.hotGoods = this.res['data']['item_list']
+              _this.hotGoods = this.res['data']['item_list']
 
             } else {  // 失败
-              this.$message.error(this.res['msg'])
+              _this.$message.error(this.res['msg'])
             }
-            this.fullscreenLoading = false;
+//            _this.fullscreenLoading = false;
           });
       }
     }
@@ -389,8 +400,6 @@
         }
       }
     }
-
-
 
     .search-result {
       width: 1226px;
