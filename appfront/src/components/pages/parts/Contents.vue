@@ -21,7 +21,23 @@
 
     <div class="hot-search"  v-if="hotSearchShow">
       <h2>{{showWords}}</h2>
-
+      <div class="goods-container" v-loading.fullscreen.lock="fullscreenLoading">
+        <div class="goods-item" v-for="(hotItem,index) in hotGoods" :key="index">
+          <a :href="hotItem.item_url" :title="hotItem.name" target="_blank">
+            <img :src="hotItem.img_url" alt="hotItem.name">
+            <p class="title">{{hotItem.name}}</p>
+          </a>
+          <p class="text" :title="hotItem.name">{{hotItem.name}}</p>
+          <div class="btn-div">
+            <p class="price">{{hotItem.price}}</p>
+            <!--<el-button class="price-btn" type="text">评论数：{{hotItem.comment_count}}</el-button>-->
+          </div>
+          <div class="btn-div">
+            <!--<p class="store">{{hotItem.store}}</p>-->
+            <p class="platform">平台：{{hotItem.platform}}</p>
+          </div>
+        </div>
+      </div>
     </div>
 
 
@@ -109,16 +125,27 @@
         showWords: '今日热搜',
         pageCount: 0,
         searchGoods: [],
+        hotGoods: []
       }
+    },
+    mounted: function () {
+      this.$nextTick(function () {
+        this.searchResultShow=false;
+        this.hotSearchShow=true;
+        this.getHotSearch()
+      })
     },
     methods: {
       searchWithPage(pageNo, order){
+        this.searchResultShow=true;
+        this.hotSearchShow=false;
         if (this.input === '') {
           this.$message.error('请输入搜索信息！')
         } else {
           this.fullscreenLoading = true;
           let kw = this.input.replace(' ', '%20');
-          this.$http.get('http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=' + kw + '&PageNo=' + pageNo + '&order=' + order)
+          let url = 'http://127.0.0.1:8000/beauty/productsList/getProductsPage?wd=' + kw + '&PageNo=' + pageNo + '&order=' + order;
+          this.$http.get(url)
             .then((response) => {
               this.res = response.data
               if (this.res.error_code === 0) {
@@ -208,6 +235,28 @@
       },
       handleCurrentChange(currentPage) {
         this.searchWithPage(currentPage, this.order);
+      },
+      getHotSearch() {
+        this.fullscreenLoading = true;
+        let url = 'http://127.0.0.1:8000/beauty/hotProduct';
+        this.$http.get(url)
+          .then((response) => {
+            this.res = response.data
+            if (this.res.error_code === 0) {
+              // 成功
+              let ress = this.res['data']['item_list']
+              // emmmmmm， 将小图换成大图
+              for (let i in ress) {
+                ress[i]['img_url'] = ress[i]['img_url'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
+              }
+
+              this.hotGoods = this.res['data']['item_list']
+
+            } else {  // 失败
+              this.$message.error(this.res['msg'])
+            }
+            this.fullscreenLoading = false;
+          });
       }
     }
 
@@ -241,6 +290,108 @@
     /*width: 70%;*/
     /*margin: 10px auto 0;*/
     /*}*/
+    .hot-search {
+      width: 1226px;
+      margin: 20px auto 0;
+      h2 {
+        font-size: 22px;
+        font-weight: 200;
+        line-height: 58px;
+        color: #333;
+        text-align: left;
+      }
+      .goods-container {
+        width: 1226px;
+        display: -webkit-flex; /* Safari  chrome */
+        display: flex;
+        justify-content: left;
+        flex-wrap: wrap; // 自动换行
+        .goods-item {
+          width: 234px;
+          height: 300px;
+          background: #fafafa;
+          display: -webkit-flex; /* Safari  chrome */
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          transition: all .2s linear;
+          margin: 8px 5px 12px 5px;
+
+          &:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-top: 3px solid #ff8080; //#e53935
+            margin-top: -1px;
+          }
+
+          a {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 400;
+            img {
+              width: 160px;
+              height: 160px;
+            }
+            .title {
+              margin-top: 10px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              -o-text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 180px;
+            }
+          }
+          .text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 180px;
+
+            color: #b0b0b0;
+            font-size: 9px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+          .btn-div {
+            display: -webkit-flex; /* Safari  chrome */
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            margin: 10px 0 0 0;
+            padding: 0;
+            text-align: right;
+            .price {
+              color: #ff8080;
+              font-size: 16px;
+              margin-right: 10px;
+            }
+            .price-btn {
+              font-size: 10px;
+              margin: 0;
+              padding: 0;
+            }
+
+            .store {
+              color: #b0b0b0;
+              font-size: 9px;
+            }
+            .platform {
+              color: #ffA0A0;
+              font-size: 9px;
+            }
+
+          }
+
+        }
+      }
+    }
+
+
+
     .search-result {
       width: 1226px;
       margin: 26px auto 0;
