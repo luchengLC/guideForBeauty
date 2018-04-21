@@ -106,12 +106,13 @@
 
 <script>
   import ElButton from '../../../../node_modules/element-ui/packages/button/src/button'
+  import bus from '../../../assets/eventBus'
   export default {
     components: {ElButton},
 
     data () {
       return {
-        username: '13411984676',  // 从TopBar中拿到的username，假数据
+        username: '',  // 从TopBar中拿到的username，假数据
         currentPage: 1,   // 当前页
         chosenItem: {},   // 暂存被选择的item， 增加到降价通知列表过程中
         dialogVisible: false,
@@ -133,7 +134,8 @@
         this.fullscreenLoading= false;
         this.searchResultShow = false;
         this.hotSearchShow = true;
-        this.getHotSearch()
+        this.getHotSearch();
+        this.getValueFromTopBar();
       })
     },
     watch: {
@@ -141,9 +143,19 @@
         this.fullscreenLoading= false;
         this.searchResultShow = true;
         this.hotSearchShow = false;
+        this.getValueFromTopBar();
       }
     },
     methods: {
+      getValueFromTopBar() {
+          //getUsername
+        console.log('bus 帮助TopBar 给 Contents传送username================================接收')
+        let _this = this;
+        bus.$on("getUsername", function (username) {
+          _this.username = username;
+        });
+        console.log('当前username = '+this.username);
+      },
       searchWithPage(pageNo, order){
         this.searchResultShow = true;
         this.hotSearchShow = false;
@@ -183,8 +195,7 @@
       search(order) {
         this.currentPage = 1;
         this.order = order;
-        this
-          .handleCurrentChange(1);
+        this.handleCurrentChange(1);
       },
       changeOrder(order) {
         this.order = order;

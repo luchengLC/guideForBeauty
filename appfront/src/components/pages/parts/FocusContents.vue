@@ -101,7 +101,7 @@
           this.$message.error('操作失误，请重新操作！')
         } else {
           _this.fullscreenLoading = true;
-          let url = 'http://127.0.0.1:8000/beauty/cut_price/get_products?user_phone='+this.username;
+          let url = 'http://127.0.0.1:8000/beauty/cut_price/get_products?user_phone='+_this.username;
           this.$http.get(url)
             .then((response) => {
               let res = response.data;
@@ -134,7 +134,9 @@
 
     watch: {
       '$route'(to, from){
-        this.init();
+        if (from.name === 'index') {
+          this.init();
+        }
       }
     }
   }

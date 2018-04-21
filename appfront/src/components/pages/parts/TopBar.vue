@@ -90,12 +90,13 @@
 
 <script>
   import ElButton from "../../../../node_modules/element-ui/packages/button/src/button";
+  import bus from '../../../assets/eventBus'
   export default {
     components: {ElButton},
     props: ["actives"],
     data () {
       return {
-        mockUserNo: '13411984676', // 假的用户账号，用于模拟 传给Contents组件来对接“增-降价通知”
+        mockUserNo: '', // 假的用户账号，用于模拟 传给Contents组件来对接“增-降价通知”
         username: '',
         usernameTmp:'',  // 辅助
         name: '',
@@ -199,6 +200,7 @@
                   _this.btnName = response.data.username;
                   _this.name = _this.btnName;
                   _this.username = _this.usernameTmp;
+                  _this.sendValueToContents();  // 给TopBar传值
                 } else  {
                   _this.isLogout = false;
                   _this.isLogin = true;
@@ -245,6 +247,7 @@
                   _this.btnName = response.data.username;
                   _this.name = _this.btnName;
                   _this.username = _this.usernameTmp;
+                  _this.sendValueToContents();  // 给TopBar传值
                 } else  {
                   _this.isLogout = false;
                   _this.isLogin = true;
@@ -253,7 +256,6 @@
               .catch(function (error) {
                 _this.$message.error(response.data.msg);
               });
-
             this.dialogRegisterVisible = false;
             this.$refs['loginForm'].resetFields();  // 清空
           } else {
@@ -272,6 +274,7 @@
             if (res.error_code === 0) {
               // console.log(res);
               _this.btnName = res.username;
+              _this.sendValueToContents();  // 给TopBar传值
               _this.isLogin = true;
               _this.isLogout = false;
 
@@ -303,6 +306,7 @@
               // console.log('checkLogin  函数')
               // console.log('现在username  = '+_this.username)
               _this.username = res.username;
+              _this.sendValueToContents();  // 给TopBar传值
               // console.log('改变后username  = '+_this.username)
               _this.isLogin = false;
               _this.isLogout = true;
@@ -325,6 +329,12 @@
       getIndex() {
         this.fullscreenLoading= false;
         this.$router.push({name: 'index'});
+      },
+      sendValueToContents() {
+        let _this = this;
+        console.log('bus 帮助TopBar 给 Contents传送username================================发送')
+        console.log('当前username = '+this.username);
+        bus.$emit("getUsername", _this.username);
       }
     },
 
