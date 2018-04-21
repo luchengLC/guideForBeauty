@@ -115,7 +115,7 @@
                   ress[i]['img_url'] = ress[i]['img_url'].toString().replace('360buyimg.com/n5', '360buyimg.com/n7')
                 }
                 _this.hotGoods = ress;
-//                _this.$message.success(res['msg'])
+                _this.$message.success(res['msg'])
 
               } else {  // 失败
                 _this.$message.error(res['msg'])
@@ -134,7 +134,7 @@
 
     watch: {
       '$route'(to, from){
-        if (from.name === 'index') {
+        if (to.name === 'focus'  && from.name === 'index') {
           this.init();
         }
       }

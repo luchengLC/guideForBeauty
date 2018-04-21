@@ -98,10 +98,12 @@
                   }
                   this.similarGoods = this.res['data'];
                   this.fullscreenLoading = false;
+                  this.$message.success(this.res['msg'])
 
                 } else {  // 失败
                   this.$message.error('没有查找到对应的相似商品，请重试！')
                   this.fullscreenLoading = false;
+                  this.$message.error(this.res['msg'])
                   // console.log(this.res['msg']);
                 }
                 this.fullscreenLoading = false;
@@ -119,7 +121,9 @@
 
     watch: {
       '$route'(to, from){
-        this.init();
+        if (to.name === 'similar'  && from.name === 'index') {
+          this.init();
+        }
       }
     }
   }
