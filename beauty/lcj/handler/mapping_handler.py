@@ -148,6 +148,3 @@ if __name__ == '__main__':
     get_products_page(keyword,page_no)
     # E:\ComputerScience\4.2 - Senior\Mine\guideForBeauty\beauty\lcj\handler\mapping_handler.py
     #select key_words from product_lipstick where key_words like '%礼袋%'  and key_words like '%唇膏%' and key_words like '%迪奥%' and key_words like '%哑光%'
-
-
-# insert into product_lipstick select * from beautyGirls_database.product_lipstick;
