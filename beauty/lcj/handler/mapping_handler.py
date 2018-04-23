@@ -124,11 +124,10 @@ def get_products_page(keyword,page_no,order):
     tables = result[0]
     keywords = result[1]
     result = handle_sql_results(tables, keywords, page_no,order)
-    page_count = int(result['page_count'])
-
-    if page_count<=1:
-        tables = get_other_tables(tables)
-        result = handle_sql_results(tables, keywords, page_no,order)
+    # page_count = int(result['page_count'])
+    # if page_count<=1:
+    #     tables = get_other_tables(tables)
+    #     result = handle_sql_results(tables, keywords, page_no,order)
     return result
 
 @require_http_methods(["GET"])
